@@ -6,17 +6,20 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">HOME</a>
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">HOME</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">AIKIDO</a>
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" routerLink="aikido" routerLinkActive="active">AIKIDO</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">NUESTRA HISTORIA</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">BLOG</a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link" href="#">LOGIN/LOGOUT</a>
         </li>
       </ul>
     </div>
