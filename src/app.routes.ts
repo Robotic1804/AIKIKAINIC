@@ -4,12 +4,20 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./app/pages/home/home.component')
-        .then((m) => m.HomeComponent),
+      import('./app/pages/home/home.component').then((m) => m.HomeComponent),
   },
   {
     path: 'aikido',
     loadComponent: () =>
-      import('./app/pages/aikido/aikido.component').then((m) => m.AikidoComponent),
+      import('./app/pages/aikido/aikido.component').then(
+        (m) => m.AikidoComponent
+      ),
+  },
+  {
+    path: 'aikidoHistoria',
+    loadComponent: () =>
+      import('./app/pages/aikidohistory/aikidohistory.component').then(
+        (m) => m.AikidohistoryComponent
+      ),
   },
 ];
