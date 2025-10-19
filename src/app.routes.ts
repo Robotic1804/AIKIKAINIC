@@ -20,4 +20,11 @@ export const routes: Routes = [
         (m) => m.AikidohistoryComponent
       ),
   },
+  {
+    path: 'horarios',
+    loadComponent: () =>
+      import('./app/pages/horarios/horarios.component').then(
+        (m) => m.HorariosComponent
+      ),
+  },
 ];
