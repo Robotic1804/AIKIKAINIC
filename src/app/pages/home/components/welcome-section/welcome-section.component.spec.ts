@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ModalComponent } from './modal.component';
+import { WelcomeSectionComponent } from './welcome-section.component';
 
-describe('ModalComponent', () => {
-  let component: ModalComponent;
-  let fixture: ComponentFixture<ModalComponent>;
+describe('WelcomeSectionComponent', () => {
+  let component: WelcomeSectionComponent;
+  let fixture: ComponentFixture<WelcomeSectionComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ModalComponent ]
+      imports: [WelcomeSectionComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ModalComponent);
+    fixture = TestBed.createComponent(WelcomeSectionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

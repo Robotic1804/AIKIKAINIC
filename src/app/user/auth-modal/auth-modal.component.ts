@@ -1,18 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { ModalService } from 'src/app/services/modal.service';
+import { Component } from '@angular/core';
+
+
 
 @Component({
   selector: 'app-auth-modal',
+  standalone: true,
   templateUrl: './auth-modal.component.html',
-  styleUrls: ['./auth-modal.component.css']
+  styleUrls: ['./auth-modal.component.css'],
+  imports: []
 })
-export class AuthModalComponent implements OnInit {
+export class AuthModalComponent  {
 
-  constructor(public modal: ModalService) { }
-  
-  ngOnInit(): void {
-    this.modal.register('auth');
-    
-  }
+
 
 }

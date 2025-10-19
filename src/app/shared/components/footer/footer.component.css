@@ -1,0 +1,25 @@
+/* Animación para el botón scroll to top */
+#scrollToTopBtn.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Efecto hover para los enlaces */
+a {
+  position: relative;
+}
+
+a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #ef4444;
+  transition: width 0.3s ease;
+}
+
+a:hover::after {
+  width: 100%;
+}
