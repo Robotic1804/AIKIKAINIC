@@ -1,0 +1,213 @@
+<!-- Sección de Video con Diseño Contenido -->
+<section class="py-20 px-4 bg-gradient-to-b from-gray-50 to-white">
+  <div class="container max-w-6xl mx-auto">
+    
+    <!-- Título de Sección -->
+    <div class="text-center mb-12">
+      <span class="inline-block text-red-600 font-semibold text-sm uppercase tracking-wider 
+                   border-b-2 border-red-600 pb-2 mb-4">
+        Video Destacado
+      </span>
+      <h2 class="text-4xl md:text-5xl font-bold text-gray-900">
+        Conoce Nuestro Dojo
+      </h2>
+    </div>
+
+    <!-- Contenedor Principal del Video -->
+    <div class="relative max-w-5xl mx-auto group">
+      
+      <!-- Kanji Vertical Izquierdo -->
+      <div class="absolute -left-16 top-1/2 -translate-y-1/2 hidden lg:block z-10">
+        <div class="text-6xl font-bold text-gray-200 writing-mode-vertical">
+          合<br>気<br>道
+        </div>
+      </div>
+
+      <!-- Kanji Vertical Derecho -->
+      <div class="absolute -right-16 top-1/2 -translate-y-1/2 hidden lg:block z-10">
+        <div class="text-gray-200 writing-mode-vertical text-lg tracking-widest">
+          AIKIDO
+        </div>
+      </div>
+
+      <!-- Contenedor del Video con Bordes Premium -->
+      <div class="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white 
+                  bg-gradient-to-br from-gray-900 to-black">
+        
+        <!-- Marco decorativo adicional -->
+        <div class="absolute inset-0 border-2 border-red-600/20 rounded-2xl m-2 pointer-events-none z-20"></div>
+        
+        <!-- VIDEO REAL AQUÍ -->
+        <div class="relative aspect-video">
+          <!-- Video de fondo -->
+          <video 
+            #videoPlayer
+            class="w-full h-full object-cover"
+            [muted]="!isPlaying()"
+            loop
+            playsinline
+            poster="assets/img/poster.jpg">
+            <source src="assets/img/video.mp4" type="video/mp4">
+            Tu navegador no soporta el elemento video.
+          </video>
+          
+          <!-- Overlay con Gradiente -->
+          @if (!isPlaying()) {
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/30"></div>
+            
+            <!-- Contenido Central -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+              
+              <!-- Títulos -->
+              <h3 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 
+                         drop-shadow-2xl animate-fade-in">
+                Descubre el Arte del Aikido
+              </h3>
+              <p class="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl 
+                        drop-shadow-lg animate-fade-in-delay">
+                Experimenta la armonía entre cuerpo, mente y espíritu
+              </p>
+              
+              <!-- Botón Play Premium -->
+              <button 
+                (click)="playVideo()"
+                class="relative group/btn cursor-pointer transform transition-all duration-300 
+                       hover:scale-110 active:scale-95">
+                
+                <!-- Anillos Animados -->
+                <div class="absolute inset-0 -m-4">
+                  <div class="absolute inset-0 rounded-full bg-white/20 animate-ping"></div>
+                  <div class="absolute inset-0 rounded-full bg-white/10 animate-ping animation-delay-200"></div>
+                </div>
+                
+                <!-- Círculo Exterior -->
+                <div class="relative w-20 h-20 md:w-24 md:h-24">
+                  <div class="absolute inset-0 bg-red-600 rounded-full shadow-2xl 
+                             group-hover/btn:bg-red-700 transition-colors duration-300"></div>
+                  
+                  <!-- Borde Interior -->
+                  <div class="absolute inset-1 border-2 border-white/30 rounded-full"></div>
+                  
+                  <!-- Icono Play -->
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <svg class="w-8 h-8 md:w-10 md:h-10 text-white ml-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                    </svg>
+                  </div>
+                </div>
+                
+                <!-- Texto debajo del botón -->
+                <span class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-white/80 
+                             text-sm font-medium whitespace-nowrap">
+                  Ver Video
+                </span>
+              </button>
+            </div>
+          }
+          
+          <!-- Controles cuando está reproduciendo -->
+          @if (isPlaying()) {
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/60 
+                        opacity-0 hover:opacity-100 transition-opacity duration-300">
+              <!-- Botón de Pausa/Play -->
+              <button 
+                (click)="togglePlay()"
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+                       bg-black/50 backdrop-blur-sm rounded-full p-4 
+                       hover:bg-black/70 transition-all duration-300">
+                @if (isPaused()) {
+                  <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                  </svg>
+                } @else {
+                  <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"/>
+                  </svg>
+                }
+              </button>
+              
+              <!-- Botón de Cerrar -->
+              <button 
+                (click)="stopVideo()"
+                class="absolute top-4 right-4 bg-black/50 backdrop-blur-sm rounded-full p-2 
+                       hover:bg-red-600 transition-all duration-300">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </button>
+              
+              <!-- Barra de Progreso -->
+              <div class="absolute bottom-0 left-0 right-0 p-4">
+                <div class="bg-white/30 backdrop-blur-sm rounded-full h-2">
+                  <div class="bg-red-600 h-full rounded-full transition-all duration-300"
+                       [style.width.%]="videoProgress()">
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+          
+          <!-- Badge de Duración -->
+          <div class="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white 
+                      px-3 py-1.5 rounded-lg flex items-center gap-2 z-30">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/>
+            </svg>
+            <span class="text-sm font-medium">5:42</span>
+          </div>
+          
+          <!-- Badge de Calidad -->
+          <div class="absolute top-4 left-4 bg-red-600 text-white px-3 py-1.5 
+                      rounded-lg text-sm font-bold z-30">
+            HD
+          </div>
+        </div>
+      </div>
+      
+      <!-- Indicador de Scroll Elegante -->
+      <div class="flex justify-center mt-8">
+        <div class="animate-bounce">
+          <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Información Adicional -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 max-w-4xl mx-auto">
+      <div class="text-center">
+        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
+          <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <h4 class="font-semibold text-gray-900">Clases Diarias</h4>
+        <p class="text-gray-600 text-sm mt-1">Lun - Sáb</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
+          <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+        </div>
+        <h4 class="font-semibold text-gray-900">Todos los Niveles</h4>
+        <p class="text-gray-600 text-sm mt-1">Principiante a Avanzado</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
+          <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <h4 class="font-semibold text-gray-900">Certificación Internacional</h4>
+        <p class="text-gray-600 text-sm mt-1">Aikikai Foundation</p>
+      </div>
+    </div>
+  </div>
+</section>

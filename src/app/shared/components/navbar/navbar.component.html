@@ -1,0 +1,180 @@
+<!-- navbar.component.html -->
+<nav class="navbar bg-white/95 backdrop-blur-md shadow-lg sticky top-0 z-50 transition-all duration-300" 
+     role="navigation" 
+     aria-label="Navegación principal">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      
+      <!-- Logo con texto en japonés -->
+      <a routerLink="/aikido"
+         class="logo-link text-2xl font-bold text-gray-900 hover:text-red-600 transition-colors duration-300"
+         aria-label="Inicio - Aikido">
+        <span class="bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent japanese-text">
+          合気道
+        </span>
+        <span class="sr-only">Aikido</span>
+      </a>
+
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex items-center space-x-1" role="menubar">
+        <a routerLink="/" 
+           routerLinkActive="nav-active"
+           [routerLinkActiveOptions]="{exact:true}"
+           class="nav-link"
+           role="menuitem">
+          <span>Inicio</span>
+          <span class="nav-underline"></span>
+        </a>
+        
+        <a routerLink="/aikido" 
+           routerLinkActive="nav-active"
+           class="nav-link"
+           role="menuitem">
+          <span>Aikido</span>
+          <span class="nav-underline"></span>
+        </a>
+        
+        <a routerLink="/historia" 
+           routerLinkActive="nav-active"
+           class="nav-link"
+           role="menuitem">
+          <span>Historia</span>
+          <span class="nav-underline"></span>
+        </a>
+        
+        <a routerLink="/maestros" 
+           routerLinkActive="nav-active"
+           class="nav-link"
+           role="menuitem">
+          <span>Maestros</span>
+          <span class="nav-underline"></span>
+        </a>
+        
+        <a routerLink="/galeria" 
+           routerLinkActive="nav-active"
+           class="nav-link"
+           role="menuitem">
+          <span>Galería</span>
+          <span class="nav-underline"></span>
+        </a>
+        
+        <a routerLink="/aiki-face" 
+           routerLinkActive="nav-active"
+           class="nav-link"
+           role="menuitem">
+          <span>Aiki-Face</span>
+          <span class="nav-underline"></span>
+        </a>
+        
+        <a routerLink="/login" 
+           class="btn-login"
+           role="menuitem">
+          Ingresar
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button (click)="toggleMenu()" 
+              type="button"
+              class="mobile-menu-btn md:hidden"
+              [attr.aria-expanded]="isMenuOpen"
+              aria-controls="mobile-menu"
+              [attr.aria-label]="isMenuOpen ? 'Cerrar menú' : 'Abrir menú'">
+        
+        <!-- Icon when menu is closed -->
+        <svg [class.hidden]="isMenuOpen" 
+             class="block h-6 w-6" 
+             fill="none" 
+             viewBox="0 0 24 24" 
+             stroke="currentColor"
+             aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        
+        <!-- Icon when menu is open -->
+        <svg [class.hidden]="!isMenuOpen" 
+             class="block h-6 w-6" 
+             fill="none" 
+             viewBox="0 0 24 24" 
+             stroke="currentColor"
+             aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div [class.hidden]="!isMenuOpen" 
+       id="mobile-menu"
+       class="md:hidden border-t border-gray-100 mobile-menu"
+       role="menu">
+    <div class="px-2 pt-2 pb-3 space-y-1">
+      
+      <a routerLink="/" 
+         (click)="closeMenu()"
+         routerLinkActive="mobile-nav-active"
+         [routerLinkActiveOptions]="{exact:true}"
+         class="mobile-nav-link"
+         role="menuitem"
+         tabindex="0">
+        Inicio
+      </a>
+      
+      <a routerLink="/aikido" 
+         (click)="closeMenu()"
+         routerLinkActive="mobile-nav-active"
+         class="mobile-nav-link"
+         role="menuitem"
+         tabindex="0">
+        Aikido
+      </a>
+      
+      <a routerLink="/historia" 
+         (click)="closeMenu()"
+         routerLinkActive="mobile-nav-active"
+         class="mobile-nav-link"
+         role="menuitem"
+         tabindex="0">
+        Historia
+      </a>
+      
+      <a routerLink="/maestros" 
+         (click)="closeMenu()"
+         routerLinkActive="mobile-nav-active"
+         class="mobile-nav-link"
+         role="menuitem"
+         tabindex="0">
+        Maestros
+      </a>
+      
+      <a routerLink="/galeria" 
+         (click)="closeMenu()"
+         routerLinkActive="mobile-nav-active"
+         class="mobile-nav-link"
+         role="menuitem"
+         tabindex="0">
+        Galería
+      </a>
+      
+      <a routerLink="/aiki-face" 
+         (click)="closeMenu()"
+         routerLinkActive="mobile-nav-active"
+         class="mobile-nav-link"
+         role="menuitem"
+         tabindex="0">
+        Aiki-Face
+      </a>
+      
+      <div class="pt-2 pb-1">
+        <a routerLink="/login" 
+           (click)="closeMenu()"
+           class="block mx-4 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white text-center font-semibold rounded-lg hover:from-red-700 hover:to-red-800 transform hover:scale-105 transition-all duration-200 shadow-lg"
+           role="menuitem"
+           tabindex="0">
+          Ingresar
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>

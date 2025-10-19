@@ -1,0 +1,472 @@
+<!-- aikido.component.html -->
+<div class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-red-50">
+  
+  <!-- Hero Section con Quote -->
+  <section class="relative overflow-hidden bg-gradient-to-r from-red-600 to-red-800 text-white py-20">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23ffffff%22 fill-opacity=%220.4%22%3E%3Cpath d=%22M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+    </div>
+    
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center space-y-6">
+        <div class="inline-block">
+          <div class="h-1 w-20 bg-white/30 mx-auto mb-6"></div>
+        </div>
+        
+        <blockquote class="space-y-4">
+          <p class="text-3xl md:text-5xl font-bold leading-tight italic">
+            "Siempre que me muevo,<br class="hidden sm:block" /> eso es Aikido"
+          </p>
+          <footer class="text-xl md:text-2xl font-light text-red-100">
+            — O-Sensei, Morihei Ueshiba
+          </footer>
+        </blockquote>
+        
+        <div class="h-1 w-20 bg-white/30 mx-auto mt-6"></div>
+      </div>
+    </div>
+    
+    <!-- Decorative wave -->
+    <div class="absolute bottom-0 left-0 right-0">
+      <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="white"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
+    
+    <!-- Intro Card -->
+    <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12 mb-12">
+      <div class="prose prose-lg max-w-none">
+        <p class="text-gray-700 leading-relaxed text-lg">
+          El Aikido es un arte marcial japonés creado por <strong class="text-red-600">Morihei Ueshiba</strong> (1883-1969), conocido como <strong class="text-red-600">O-Sensei</strong> o Gran Maestro. Tras estudiar y dominar múltiples artes marciales tradicionales como kendo y jujitsu, en la década de 1930 decidió establecer su propio camino: uno significativamente diferente a las escuelas antiguas. Este arte se conocería como <strong class="text-red-600">Aikido</strong>.
+        </p>
+      </div>
+    </div>
+
+    <!-- Kanji Section -->
+    <div class="mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-4">
+        El Significado de 
+        <span class="text-red-600">Aikido</span>
+      </h2>
+      <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+        La palabra "Aikido" está formada por tres kanji (caracteres japoneses):
+      </p>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Ai -->
+        <div class="group">
+          <div class="bg-gradient-to-br from-red-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-red-100">
+            <div class="text-center space-y-4">
+              <div class="text-7xl font-bold text-red-600 group-hover:scale-110 transition-transform duration-300">
+                合
+              </div>
+              <div class="space-y-2">
+                <h3 class="text-2xl font-bold text-gray-900">AI</h3>
+                <p class="text-gray-600">Unión, Armonía</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ki -->
+        <div class="group">
+          <div class="bg-gradient-to-br from-red-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-red-100">
+            <div class="text-center space-y-4">
+              <div class="text-7xl font-bold text-red-600 group-hover:scale-110 transition-transform duration-300">
+                気
+              </div>
+              <div class="space-y-2">
+                <h3 class="text-2xl font-bold text-gray-900">KI</h3>
+                <p class="text-gray-600">Espíritu, Energía Vital</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Do -->
+        <div class="group">
+          <div class="bg-gradient-to-br from-red-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-red-100">
+            <div class="text-center space-y-4">
+              <div class="text-7xl font-bold text-red-600 group-hover:scale-110 transition-transform duration-300">
+                道
+              </div>
+              <div class="space-y-2">
+                <h3 class="text-2xl font-bold text-gray-900">DO</h3>
+                <p class="text-gray-600">Camino, Vía</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Translation -->
+      <div class="mt-12 text-center">
+        <div class="inline-block bg-red-600 text-white px-8 py-4 rounded-full shadow-lg">
+          <p class="text-xl md:text-2xl font-semibold">
+            "El Camino de la Armonización de la Energía"
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Philosophy Section -->
+    <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12 mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-8">
+        La Filosofía del 
+        <span class="text-red-600">Aikido</span>
+      </h2>
+      
+      <div class="space-y-6 text-gray-700 leading-relaxed">
+        <p class="text-lg">
+          O-Sensei comprendió una verdad fundamental: <strong class="text-red-600">ganar a expensas de la derrota de otro no es una verdadera victoria</strong>. A partir de esta revelación, transformó las habilidades marciales que había dominado en una disciplina completamente nueva.
+        </p>
+
+        <div class="bg-red-50 border-l-4 border-red-600 p-6 rounded-r-lg my-8">
+          <p class="text-lg italic text-gray-800">
+            En Aikido, nos fusionamos con nuestro atacante en lugar de oponernos directamente. Nunca hay confrontación frontal. La energía del agresor es redirigida o evitada, conduciéndolo a una proyección o inmovilización con el menor daño posible.
+          </p>
+        </div>
+
+        <p class="text-lg">
+          El agresor aprende rápidamente que solo se lastimará con su propia agresión. Esta es la esencia del Aikido: <strong class="text-red-600">transformar el conflicto en armonía</strong>.
+        </p>
+      </div>
+    </div>
+
+    <!-- Movement Section -->
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+      <!-- Circular Movement -->
+      <div class="bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-2xl p-8 shadow-xl">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold">Movimiento Circular</h3>
+        </div>
+        <p class="text-gray-300 leading-relaxed">
+          Casi todos los movimientos de Aikido son de naturaleza circular. Incluso los que parecen directos contienen elementos de movimiento en espiral, creando una dinámica fluida y continua.
+        </p>
+      </div>
+
+      <!-- Power & Difficulty -->
+      <div class="bg-gradient-to-br from-red-600 to-red-700 text-white rounded-2xl p-8 shadow-xl">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold">Poder y Técnica</h3>
+        </div>
+        <p class="text-red-100 leading-relaxed">
+          El Aikido puede ser extremadamente vigoroso, dinámico y poderoso. Es muy difícil de ejecutar correctamente, a pesar de la facilidad aparente con la que un aikidoka experimentado lanza a su compañero.
+        </p>
+      </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-12 text-center text-white shadow-2xl mb-12">
+      <div class="max-w-3xl mx-auto space-y-8">
+        <h2 class="text-3xl md:text-5xl font-bold leading-tight">
+          Solo hay una forma de conocer verdaderamente el poder del Aikido
+        </h2>
+        
+        <div class="inline-block">
+          <div class="bg-red-600 hover:bg-red-700 text-white text-2xl md:text-4xl font-bold px-12 py-6 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 cursor-pointer">
+            ¡Practicar!
+          </div>
+        </div>
+
+        <p class="text-gray-300 text-lg">
+          La verdadera comprensión solo llega a través de la experiencia directa
+        </p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- SECCIONES NUEVAS -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-24">
+
+    <!-- SECCIÓN 1: 3 Pilares -->
+    <section id="tres-pilares" class="scroll-mt-20">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          ¿Por qué practicar <span class="text-red-600">Aikido</span>?
+        </h2>
+        <div class="w-24 h-1 bg-red-600 mx-auto mb-6"></div>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Descubre los tres pilares que transformarán tu vida
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Pilar 1: Mente -->
+        <div class="group relative">
+          <div class="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border-2 border-transparent hover:border-red-200 h-full">
+            <div class="text-center space-y-6">
+              <div class="w-20 h-20 mx-auto bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center transform group-hover:rotate-6 group-hover:scale-110 transition-all duration-300 shadow-lg">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                </svg>
+              </div>
+              
+              <h3 class="text-2xl font-bold text-gray-900">Equilibrio Mental</h3>
+              
+              <p class="text-gray-600 leading-relaxed">
+                Desarrolla concentración profunda, claridad mental y paz interior a través de la práctica consciente
+              </p>
+              
+              <ul class="text-left space-y-2 text-sm text-gray-700">
+                <li class="flex items-start gap-2">
+                  <span class="text-purple-600 mt-1">✓</span>
+                  <span>Reduce el estrés y la ansiedad</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-purple-600 mt-1">✓</span>
+                  <span>Mejora la concentración</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-purple-600 mt-1">✓</span>
+                  <span>Desarrolla resiliencia emocional</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pilar 2: Cuerpo -->
+        <div class="group relative">
+          <div class="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border-2 border-transparent hover:border-red-200 h-full">
+            <div class="text-center space-y-6">
+              <div class="w-20 h-20 mx-auto bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center transform group-hover:rotate-6 group-hover:scale-110 transition-all duration-300 shadow-lg">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+              </div>
+              
+              <h3 class="text-2xl font-bold text-gray-900">Fuerza sin Violencia</h3>
+              
+              <p class="text-gray-600 leading-relaxed">
+                Aumenta tu fuerza, flexibilidad y coordinación mientras aprendes defensa personal efectiva
+              </p>
+              
+              <ul class="text-left space-y-2 text-sm text-gray-700">
+                <li class="flex items-start gap-2">
+                  <span class="text-red-600 mt-1">✓</span>
+                  <span>Mejora flexibilidad y balance</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-red-600 mt-1">✓</span>
+                  <span>Fortalece todo el cuerpo</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-red-600 mt-1">✓</span>
+                  <span>Defensa personal práctica</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pilar 3: Espíritu -->
+        <div class="group relative">
+          <div class="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border-2 border-transparent hover:border-red-200 h-full">
+            <div class="text-center space-y-6">
+              <div class="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center transform group-hover:rotate-6 group-hover:scale-110 transition-all duration-300 shadow-lg">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                </svg>
+              </div>
+              
+              <h3 class="text-2xl font-bold text-gray-900">Armonía Interior</h3>
+              
+              <p class="text-gray-600 leading-relaxed">
+                Cultiva respeto, humildad y conexión profunda contigo mismo y los demás
+              </p>
+              
+              <ul class="text-left space-y-2 text-sm text-gray-700">
+                <li class="flex items-start gap-2">
+                  <span class="text-blue-600 mt-1">✓</span>
+                  <span>Valores de respeto y disciplina</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-blue-600 mt-1">✓</span>
+                  <span>Comunidad de apoyo</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-blue-600 mt-1">✓</span>
+                  <span>Crecimiento personal continuo</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 2: Quiz -->
+    <section id="quiz" class="scroll-mt-20">
+      <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-8 md:p-12 shadow-2xl">
+        <div class="max-w-3xl mx-auto">
+          
+          <!-- Header -->
+          @if (!showQuizResult) {
+            <div class="text-center mb-10">
+            <div class="w-16 h-16 bg-red-600 rounded-full mx-auto mb-6 flex items-center justify-center">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+              </svg>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+              ¿Qué clase es perfecta para ti?
+            </h2>
+            <p class="text-gray-300 text-lg">
+              Responde 3 preguntas y descubre tu camino ideal
+            </p>
+            </div>
+          }
+
+          <!-- Pregunta 1 -->
+          @if (currentQuestion === 1 && !showQuizResult) {
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 space-y-6">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold">1</span>
+                <h3 class="text-xl font-semibold text-white">¿Cuál es tu objetivo principal?</h3>
+              </div>
+              
+              <div class="space-y-3">
+                <button (click)="selectAnswer(1, 'defensa')" class="w-full text-left p-4 rounded-xl bg-white/5 hover:bg-white/10 border-2 border-transparent hover:border-red-500 transition-all duration-200 text-white">
+                  <div class="flex items-center gap-3">
+                    <span class="text-2xl">🛡️</span>
+                    <span>Aprender defensa personal efectiva</span>
+                  </div>
+                </button>
+                
+                <button (click)="selectAnswer(1, 'fitness')" class="w-full text-left p-4 rounded-xl bg-white/5 hover:bg-white/10 border-2 border-transparent hover:border-red-500 transition-all duration-200 text-white">
+                  <div class="flex items-center gap-3">
+                    <span class="text-2xl">💪</span>
+                    <span>Mejorar mi estado físico y flexibilidad</span>
+                  </div>
+                </button>
+                
+                <button (click)="selectAnswer(1, 'mental')" class="w-full text-left p-4 rounded-xl bg-white/5 hover:bg-white/10 border-2 border-transparent hover:border-red-500 transition-all duration-200 text-white">
+                  <div class="flex items-center gap-3">
+                    <span class="text-2xl">🧘</span>
+                    <span>Desarrollar disciplina y paz mental</span>
+                  </div>
+                </button>
+                
+                <button (click)="selectAnswer(1, 'tradicion')" class="w-full text-left p-4 rounded-xl bg-white/5 hover:bg-white/10 border-2 border-transparent hover:border-red-500 transition-all duration-200 text-white">
+                  <div class="flex items-center gap-3">
+                    <span class="text-2xl">🏯</span>
+                    <span>Conectar con la tradición japonesa</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          }
+
+          <!-- Pregunta 2 -->
+          @if (currentQuestion === 2 && !showQuizResult) {
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 space-y-6">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold">2</span>
+                <h3 class="text-xl font-semibold text-white">¿Cuál es tu nivel de experiencia?</h3>
+              </div>
+              
+              <div class="space-y-3">
+                <button (click)="selectAnswer(2, 'ninguna')" class="w-full text-left p-4 rounded-xl bg-white/5 hover:bg-white/10 border-2 border-transparent hover:border-red-500 transition-all duration-200 text-white">
+                  <div class="flex items-center gap-3">
+                    <span class="text-2xl">🌱</span>
+                    <span>Ninguna - Soy completamente nuevo</span>
+                  </div>
+                </button>
+                
+                <button (click)="selectAnswer(2, 'otra')" class="w-full text-left p-4 rounded-xl bg-white/5 hover:bg-white/10 border-2 border-transparent hover:border-red-500 transition-all duration-200 text-white">
+                  <div class="flex items-center gap-3">
+                    <span class="text-2xl">🥋</span>
+                    <span>Practiqué otra arte marcial</span>
+                  </div>
+                </button>
+                
+                <button (click)="selectAnswer(2, 'aikido')" class="w-full text-left p-4 rounded-xl bg-white/5 hover:bg-white/10 border-2 border-transparent hover:border-red-500 transition-all duration-200 text-white">
+                  <div class="flex items-center gap-3">
+                    <span class="text-2xl">⭐</span>
+                    <span>Ya practiqué Aikido antes</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          }
+
+          <!-- Pregunta 3 -->
+          @if (currentQuestion === 3 && !showQuizResult) {
+            <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 space-y-6">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold">3</span>
+                <h3 class="text-xl font-semibold text-white">¿Cuánto tiempo puedes dedicar?</h3>
+              </div>
+              
+              <div class="space-y-3">
+                <button (click)="selectAnswer(3, '1-2')" class="w-full text-left p-4 rounded-xl bg-white/5 hover:bg-white/10 border-2 border-transparent hover:border-red-500 transition-all duration-200 text-white">
+                  <div class="flex items-center gap-3">
+                    <span class="text-2xl">📅</span>
+                    <span>1-2 días por semana</span>
+                  </div>
+                </button>
+                
+                <button (click)="selectAnswer(3, '3-4')" class="w-full text-left p-4 rounded-xl bg-white/5 hover:bg-white/10 border-2 border-transparent hover:border-red-500 transition-all duration-200 text-white">
+                  <div class="flex items-center gap-3">
+                    <span class="text-2xl">🗓️</span>
+                    <span>3-4 días por semana</span>
+                  </div>
+                </button>
+                
+                <button (click)="selectAnswer(3, '5+')" class="w-full text-left p-4 rounded-xl bg-white/5 hover:bg-white/10 border-2 border-transparent hover:border-red-500 transition-all duration-200 text-white">
+                  <div class="flex items-center gap-3">
+                    <span class="text-2xl">🔥</span>
+                    <span>5 o más días por semana</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          }
+
+          <!-- Resultado -->
+          @if (showQuizResult) {
+            <div class="bg-gradient-to-br from-red-600 to-red-700 rounded-2xl p-8 text-center space-y-6">
+              <div class="text-6xl mb-4">🎯</div>
+              <h3 class="text-3xl font-bold text-white mb-4">
+                ¡Tu clase ideal es!
+              </h3>
+              <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+                <p class="text-2xl font-bold text-white mb-2">{{ resultData.class }}</p>
+                <p class="text-red-100 mb-4">{{ resultData.schedule }}</p>
+                <p class="text-white/90 leading-relaxed">{{ resultData.description }}</p>
+              </div>
+              <div class="pt-4 space-y-3">
+                <button class="w-full bg-white text-red-600 font-bold py-4 px-8 rounded-xl hover:bg-red-50 transition-all duration-200 shadow-lg">
+                  Reservar Clase de Prueba Gratis
+                </button>
+                <button (click)="resetQuiz()" class="w-full bg-white/10 text-white font-semibold py-3 px-8 rounded-xl hover:bg-white/20 transition-all duration-200">
+                  Volver a hacer el quiz
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="h-20"></div>
+
+</div>
