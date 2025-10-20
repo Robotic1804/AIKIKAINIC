@@ -66,11 +66,51 @@
           <span class="nav-underline"></span>
         </a>
         
-        <a routerLink="/login" 
-           class="btn-login"
-           role="menuitem">
-          Ingresar
+        <!-- Contenedor del botón y menú -->
+<div class="relative inline-block text-left" (clickOutside)="closeMenu()">
+  <!-- Botón principal -->
+  <button
+    (click)="toggleMenu()"
+    class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow transition"
+  >
+    Ingresar
+  </button>
+
+  <!-- Menú desplegable -->
+  @if (showMenu) {
+    <div class="absolute right-0 mt-2 w-56 origin-top-right bg-white border border-gray-200 rounded shadow-lg z-50">
+      <div class="py-1">
+        <a
+          (click)="navigateTo('/register')"
+          (keyup.enter)="navigateTo('/register')"
+          (keyup.space)="navigateTo('/register')"
+          tabindex="0"
+          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+        >
+          Registrarse
         </a>
+        <a
+          (click)="navigateTo('/login')"
+          (keyup.enter)="navigateTo('/login')"
+          (keyup.space)="navigateTo('/login')"
+          tabindex="0"
+          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+        >
+          Ingresar como Usuario
+        </a>
+        <a
+          (click)="navigateTo('/admin')"
+          (keyup.enter)="navigateTo('/admin')"
+          (keyup.space)="navigateTo('/admin')"
+          tabindex="0"
+          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+        >
+          Ingresar como Administrador
+        </a>
+      </div>
+    </div>
+  }
+</div>
       </div>
 
       <!-- Mobile Menu Button -->

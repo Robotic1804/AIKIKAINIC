@@ -6,11 +6,17 @@ import {
   Renderer2,
   inject,
 } from '@angular/core';
-import { Router, NavigationEnd, RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  Router,
+  NavigationEnd,
+  RouterLink,
+  RouterLinkActive,
+} from '@angular/router';
 import { filter, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
+  standalone: true,
   imports: [RouterLink, RouterLinkActive],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
@@ -18,6 +24,9 @@ import { filter, Subject, takeUntil } from 'rxjs';
 export class NavbarComponent implements OnInit, OnDestroy {
   isMenuOpen = false;
   isScrolled = false;
+  showMenu = false;
+  isLoginMenuOpen = false; // ⬅️ Para el menú del botón "Ingresar"
+
   private destroy$ = new Subject<void>();
   private router = inject(Router);
   private renderer = inject(Renderer2);
@@ -31,39 +40,28 @@ export class NavbarComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.closeMenu();
+        this.closeLoginMenu(); // ⬅️ Cierra el menú de login también
       });
 
-    // Inicializar estado del scroll
     this.checkScroll();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-
-    // Limpiar clase del body si existe
     this.renderer.removeClass(document.body, 'menu-open');
   }
 
-  /**
-   * Alterna el estado del menú móvil
-   */
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
     this.updateBodyClass();
   }
 
-  /**
-   * Cierra el menú móvil
-   */
   closeMenu(): void {
     this.isMenuOpen = false;
     this.updateBodyClass();
   }
 
-  /**
-   * Actualiza la clase del body para prevenir scroll
-   */
   private updateBodyClass(): void {
     if (this.isMenuOpen) {
       this.renderer.addClass(document.body, 'menu-open');
@@ -72,46 +70,43 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Detecta el scroll para cambiar estilos del navbar
-   */
   @HostListener('window:scroll', ['$event'])
   onWindowScroll(): void {
     this.checkScroll();
   }
 
-  /**
-   * Cierra el menú al presionar Escape
-   */
   @HostListener('document:keydown.escape', ['$event'])
   onEscapeKey(event: KeyboardEvent): void {
-    if (this.isMenuOpen) {
+    if (this.isMenuOpen || this.isLoginMenuOpen) {
       this.closeMenu();
+      this.closeLoginMenu();
       event.preventDefault();
     }
   }
 
-  /**
-   * Verifica la posición del scroll
-   */
   private checkScroll(): void {
     const scrollPosition =
       window.pageYOffset || document.documentElement.scrollTop;
     this.isScrolled = scrollPosition > 50;
   }
 
-  /**
-   * Obtiene las clases dinámicas del navbar
-   */
   get navbarClasses(): string[] {
-    const classes = [];
+    return [this.isScrolled ? 'scrolled' : 'at-top'];
+  }
 
-    if (this.isScrolled) {
-      classes.push('scrolled');
-    } else {
-      classes.push('at-top');
-    }
+  // =============================
+  // 🔽 Lógica del menú de ingresar
+  // =============================
+  toggleLoginMenu(): void {
+    this.isLoginMenuOpen = !this.isLoginMenuOpen;
+  }
 
-    return classes;
+  closeLoginMenu(): void {
+    this.isLoginMenuOpen = false;
+  }
+
+  navigateTo(path: string): void {
+    this.closeLoginMenu();
+    this.router.navigate([path]);
   }
 }
