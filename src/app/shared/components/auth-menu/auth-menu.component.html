@@ -1,0 +1,392 @@
+<!-- auth.component.html -->
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
+  
+  <!-- Contenedor principal -->
+  <div class="w-full max-w-md">
+    
+    <!-- Estado inicial: Botón de Ingresar -->
+    @if (!mostrarOpciones) {
+    <div class="text-center">
+      <div class="bg-white rounded-2xl shadow-2xl p-12 transform transition-all hover:scale-105">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">Bienvenido</h1>
+        <p class="text-gray-600 mb-8">Sistema de Autenticación</p>
+        
+        <button 
+          (click)="mostrarOpcionesIngreso()"
+          [class.animate-pulse]="animacionActiva"
+          class="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold py-4 px-12 rounded-full text-lg hover:from-blue-600 hover:to-purple-700 transform transition-all hover:scale-110 shadow-lg">
+          Ingresar
+        </button>
+      </div>
+    </div>
+    }
+
+    <!-- Mostrar las 3 opciones -->
+    @if (mostrarOpciones && !opcionSeleccionada) {
+    <div class="space-y-4">
+      <div class="bg-white rounded-2xl shadow-2xl p-8 animate-fadeIn">
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Selecciona una opción</h2>
+        
+        <!-- Opción 1: Registrarse -->
+        <button 
+          (click)="seleccionarOpcion('registro')"
+          class="w-full bg-gradient-to-r from-green-400 to-green-600 text-white font-semibold py-4 px-6 rounded-lg mb-3 hover:from-green-500 hover:to-green-700 transform transition-all hover:scale-105 shadow-md flex items-center justify-center">
+          <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+          </svg>
+          Registrarse
+        </button>
+
+        <!-- Opción 2: Ingresar a la cuenta -->
+        <button 
+          (click)="seleccionarOpcion('login')"
+          class="w-full bg-gradient-to-r from-blue-400 to-blue-600 text-white font-semibold py-4 px-6 rounded-lg mb-3 hover:from-blue-500 hover:to-blue-700 transform transition-all hover:scale-105 shadow-md flex items-center justify-center">
+          <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+          </svg>
+          Ingresar a mi Cuenta
+        </button>
+
+        <!-- Opción 3: Ingresar como Administrador -->
+        <button 
+          (click)="seleccionarOpcion('admin')"
+          class="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white font-semibold py-4 px-6 rounded-lg mb-6 hover:from-purple-600 hover:to-pink-700 transform transition-all hover:scale-105 shadow-md flex items-center justify-center">
+          <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+          </svg>
+          Ingresar como Administrador
+        </button>
+
+        <!-- Botón volver -->
+        <button 
+          (click)="volverInicio()"
+          class="w-full text-gray-600 hover:text-gray-800 font-medium py-2 transition-colors">
+          ← Volver
+        </button>
+      </div>
+    </div>
+    }
+
+    <!-- Formulario de Registro -->
+    @if (opcionSeleccionada === 'registro') {
+    <div class="bg-white rounded-2xl shadow-2xl p-8 animate-fadeIn">
+      <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">
+        <span class="text-green-600">Crear</span> Nueva Cuenta
+      </h2>
+      
+      <form [formGroup]="registroForm" (ngSubmit)="registrar()">
+        <!-- Campo Nombre -->
+        <div class="mb-4">
+          <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">Nombre Completo</label>
+          <input 
+            id="nombre"
+            formControlName="nombre"
+            type="text"
+            class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+            [class.border-red-500]="nombreInvalido"
+            placeholder="Juan Pérez">
+          @if (nombreInvalido) {
+          <span class="text-red-500 text-xs mt-1">
+            El nombre debe tener al menos 3 caracteres
+          </span>
+          }
+        </div>
+
+        <!-- Campo Email -->
+        <div class="mb-4">
+          <label for="email-registro" class="block text-gray-700 text-sm font-bold mb-2">Correo Electrónico</label>
+          <input 
+            id="email-registro"
+            formControlName="email"
+            type="email"
+            class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+            [class.border-red-500]="emailRegistroInvalido"
+            placeholder="correo@ejemplo.com">
+          @if (emailRegistroInvalido) {
+          <span class="text-red-500 text-xs mt-1">
+            Ingrese un email válido
+          </span>
+          }
+        </div>
+
+        <!-- Campo Contraseña -->
+        <div class="mb-4">
+          <label for="password-registro" class="block text-gray-700 text-sm font-bold mb-2">Contraseña</label>
+          <input 
+            id="password-registro"
+            formControlName="password"
+            type="password"
+            class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+            [class.border-red-500]="passwordRegistroInvalido"
+            placeholder="••••••••">
+          @if (passwordRegistroInvalido) {
+          <span class="text-red-500 text-xs mt-1">
+            La contraseña debe tener al menos 6 caracteres
+          </span>
+          }
+        </div>
+
+        <!-- Campo Confirmar Contraseña -->
+        <div class="mb-6">
+          <label for="confirmar-password" class="block text-gray-700 text-sm font-bold mb-2">Confirmar Contraseña</label>
+          <input 
+            id="confirmar-password"
+            formControlName="confirmarPassword"
+            type="password"
+            class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+            [class.border-red-500]="confirmarPasswordInvalido"
+            placeholder="••••••••">
+          @if (confirmarPasswordInvalido) {
+          <span class="text-red-500 text-xs mt-1">
+            Las contraseñas no coinciden
+          </span>
+          }
+        </div>
+
+        <!-- Mensajes de error/éxito -->
+        @if (mensajeError) {
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {{ mensajeError }}
+        </div>
+        }
+        @if (mensajeExito) {
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+          {{ mensajeExito }}
+        </div>
+        }
+
+        <!-- Botón Submit -->
+        <button 
+          type="submit"
+          [disabled]="cargando"
+          class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-3 px-4 rounded-lg hover:from-green-600 hover:to-green-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+          @if (!cargando) {
+          <span>Registrarse</span>
+          } @else {
+          <span class="flex items-center justify-center">
+            <svg class="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+            </svg>
+            Registrando...
+          </span>
+          }
+        </button>
+      </form>
+
+      <button 
+        (click)="volverAOpciones()"
+        class="w-full text-gray-600 hover:text-gray-800 font-medium py-2 mt-4 transition-colors">
+        ← Volver a opciones
+      </button>
+    </div>
+    }
+
+    <!-- Formulario de Login Usuario -->
+    @if (opcionSeleccionada === 'login') {
+    <div class="bg-white rounded-2xl shadow-2xl p-8 animate-fadeIn">
+      <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">
+        <span class="text-blue-600">Ingresar</span> a mi Cuenta
+      </h2>
+      
+      <form [formGroup]="loginForm" (ngSubmit)="loginUsuario()">
+        <!-- Campo Email -->
+        <div class="mb-4">
+          <label for="email-login" class="block text-gray-700 text-sm font-bold mb-2">Correo Electrónico</label>
+          <input 
+            id="email-login"
+            formControlName="email"
+            type="email"
+            class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+            [class.border-red-500]="emailLoginInvalido"
+            placeholder="correo@ejemplo.com">
+          @if (emailLoginInvalido) {
+          <span class="text-red-500 text-xs mt-1">
+            Ingrese un email válido
+          </span>
+          }
+        </div>
+
+        <!-- Campo Contraseña -->
+        <div class="mb-6">
+          <label for="password-login" class="block text-gray-700 text-sm font-bold mb-2">Contraseña</label>
+          <input 
+            id="password-login"
+            formControlName="password"
+            type="password"
+            class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+            [class.border-red-500]="passwordLoginInvalido"
+            placeholder="••••••••">
+          @if (passwordLoginInvalido) {
+          <span class="text-red-500 text-xs mt-1">
+            Ingrese su contraseña
+          </span>
+          }
+        </div>
+
+        <!-- Mensajes de error/éxito -->
+        @if (mensajeError) {
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {{ mensajeError }}
+        </div>
+        }
+        @if (mensajeExito) {
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+          {{ mensajeExito }}
+        </div>
+        }
+
+        <!-- Botón Submit -->
+        <button 
+          type="submit"
+          [disabled]="cargando"
+          class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+          @if (!cargando) {
+          <span>Iniciar Sesión</span>
+          } @else {
+          <span class="flex items-center justify-center">
+            <svg class="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+            </svg>
+            Ingresando...
+          </span>
+          }
+        </button>
+
+        <!-- Enlaces adicionales -->
+        <div class="mt-4 text-center">
+          <a href="#" class="text-sm text-blue-600 hover:text-blue-800">¿Olvidaste tu contraseña?</a>
+        </div>
+      </form>
+
+      <button 
+        (click)="volverAOpciones()"
+        class="w-full text-gray-600 hover:text-gray-800 font-medium py-2 mt-4 transition-colors">
+        ← Volver a opciones
+      </button>
+    </div>
+    }
+
+    <!-- Formulario de Login Administrador -->
+    @if (opcionSeleccionada === 'admin') {
+    <div class="bg-white rounded-2xl shadow-2xl p-8 animate-fadeIn">
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full shadow-lg mb-4">
+          <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+          </svg>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-800">
+          Acceso de <span class="text-purple-600">Administrador</span>
+        </h2>
+        <p class="text-sm text-gray-600 mt-2">Área restringida - Solo personal autorizado</p>
+      </div>
+      
+      <form [formGroup]="adminForm" (ngSubmit)="loginAdmin()">
+        <!-- Campo Email -->
+        <div class="mb-4">
+          <label for="email-admin" class="block text-gray-700 text-sm font-bold mb-2">Email Administrativo</label>
+          <div class="relative">
+            <input 
+              id="email-admin"
+              formControlName="email"
+              type="email"
+              class="w-full px-4 py-3 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+              [class.border-red-500]="emailAdminInvalido"
+              placeholder="admin@sistema.com">
+            <svg class="w-5 h-5 text-gray-400 absolute left-3 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
+            </svg>
+          </div>
+          @if (emailAdminInvalido) {
+          <span class="text-red-500 text-xs mt-1">
+            Ingrese un email válido
+          </span>
+          }
+        </div>
+
+        <!-- Campo Contraseña -->
+        <div class="mb-4">
+          <label for="password-admin" class="block text-gray-700 text-sm font-bold mb-2">Contraseña de Administrador</label>
+          <div class="relative">
+            <input 
+              id="password-admin"
+              formControlName="password"
+              type="password"
+              class="w-full px-4 py-3 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+              [class.border-red-500]="passwordAdminInvalido"
+              placeholder="••••••••">
+            <svg class="w-5 h-5 text-gray-400 absolute left-3 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+            </svg>
+          </div>
+          @if (passwordAdminInvalido) {
+          <span class="text-red-500 text-xs mt-1">
+            Ingrese su contraseña
+          </span>
+          }
+        </div>
+
+        <!-- Campo Código 2FA (Opcional) -->
+        <div class="mb-6">
+          <label for="codigo-2fa" class="block text-gray-700 text-sm font-bold mb-2">
+            Código 2FA (Opcional)
+            <span class="text-xs font-normal text-gray-500 ml-2">Si está habilitado</span>
+          </label>
+          <input 
+            id="codigo-2fa"
+            formControlName="codigo2FA"
+            type="text"
+            class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+            placeholder="000000"
+            maxlength="6">
+        </div>
+
+        <!-- Advertencia de seguridad -->
+        <div class="bg-purple-50 border-l-4 border-purple-500 p-3 mb-4">
+          <p class="text-xs text-purple-700">
+            <strong>Nota de Seguridad:</strong> Este acceso está limitado a máximo 3 administradores autorizados. Todos los intentos de acceso son registrados.
+          </p>
+        </div>
+
+        <!-- Mensajes de error/éxito -->
+        @if (mensajeError) {
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {{ mensajeError }}
+        </div>
+        }
+        @if (mensajeExito) {
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+          {{ mensajeExito }}
+        </div>
+        }
+
+        <!-- Botón Submit -->
+        <button 
+          type="submit"
+          [disabled]="cargando"
+          class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-3 px-4 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg">
+          @if (!cargando) {
+          <span>Acceder como Administrador</span>
+          } @else {
+          <span class="flex items-center justify-center">
+            <svg class="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+            </svg>
+            Verificando credenciales...
+          </span>
+          }
+        </button>
+      </form>
+
+      <button 
+        (click)="volverAOpciones()"
+        class="w-full text-gray-600 hover:text-gray-800 font-medium py-2 mt-4 transition-colors">
+        ← Volver a opciones
+      </button>
+    </div>
+    }
+  </div>
+</div>
