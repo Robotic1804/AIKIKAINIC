@@ -1,14 +1,125 @@
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+/* auth.component.css */
+
+/* Animación de aparición suave */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Animación de pulso mejorada */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+/* Transiciones suaves para todos los elementos interactivos */
+button, input, a {
+  transition: all 0.3s ease;
+}
+
+/* Mejora del focus para accesibilidad */
+input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Efectos hover mejorados */
+button:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+button:not(:disabled):active {
+  transform: translateY(0);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estados de carga */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Mejoras de accesibilidad */
+*:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Prevenir FOUC (Flash of Unstyled Content) - Mayor especificidad sin !important */
+*[ng-cloak][ng-cloak],
+[ng-cloak] {
+  display: none;
+}
+
+/* Mejora de rendimiento para animaciones */
+.transform {
+  will-change: transform;
+}
+
+/* Suavizar transiciones de opacidad */
+.transition-opacity {
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Responsive: ajustes para móviles */
+@media (max-width: 640px) {
+  .animate-fadeIn {
+    animation-duration: 0.3s;
   }
   
-  .animate-fadeIn {
-    animation: fadeIn 0.3s ease-in-out;
+  button {
+    touch-action: manipulation;
   }
+}
+
+/* Mejora visual para inputs con error */
+input.border-red-500 {
+  animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Estilo para mensajes de alerta con animación */
+[role="alert"] {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
