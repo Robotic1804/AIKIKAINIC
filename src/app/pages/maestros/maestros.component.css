@@ -1,0 +1,82 @@
+@layer utilities {
+  @keyframes float-soft {
+    0%, 100% { transform: translateY(0) }
+    50% { transform: translateY(-6px) }
+  }
+  .animate-float-soft {
+    animation: float-soft 3s ease-in-out infinite;
+  }
+
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-6deg) }
+    50% { transform: rotate(6deg) }
+  }
+  .animate-wiggle {
+    animation: wiggle 1.2s ease-in-out infinite;
+  }
+
+  @keyframes wobble {
+    0%,100% { transform: rotate(0deg) }
+    25% { transform: rotate(-8deg) }
+    75% { transform: rotate(8deg) }
+  }
+  .animate-wobble {
+    animation: wobble 1.6s ease-in-out infinite;
+  }
+
+  @keyframes tool-spin-float {
+    0%   { transform: translateY(0) rotate(0deg) }
+    50%  { transform: translateY(-6px) rotate(180deg) }
+    100% { transform: translateY(0) rotate(360deg) }
+  }
+  .animate-tool {
+    animation: tool-spin-float 2.2s ease-in-out infinite;
+    transform-origin: 50% 50%;
+  }
+
+  @keyframes pop-in {
+    0%   { transform: scale(.6); opacity: 0 }
+    60%  { transform: scale(1.05); opacity: 1 }
+    100% { transform: scale(1) }
+  }
+  .animate-pop-in {
+    animation: pop-in .5s cubic-bezier(.2,.9,.3,1) both;
+  }
+
+  @keyframes tape-slide {
+    0% { background-position: 0 0 }
+    100% { background-position: 32px 0 }
+  }
+  .animate-tape {
+    animation: tape-slide .6s linear infinite;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-66%) }
+    100% { transform: translateX(100%) }
+  }
+  .animate-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .animate-shimmer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent);
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+
+  /* Respeta usuarios con reduce motion */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-float-soft,
+    .animate-wiggle,
+    .animate-wobble,
+    .animate-tool,
+    .animate-pop-in,
+    .animate-tape,
+    .animate-shimmer::before {
+      animation: none !important;
+    }
+  }
+}
