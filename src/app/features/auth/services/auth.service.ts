@@ -1,85 +1,16 @@
+// src/app/core/services/auth.service.ts
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError, of } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
-
-// Tipos auxiliares
-type Rol = 'usuario' | 'admin';
-
-// Definimos qué privilegios puede tener un admin
-interface Privilegios {
-  gestionarUsuarios?: boolean;
-  gestionarContenido?: boolean;
-  verReportes?: boolean;
-  configurarSistema?: boolean;
-  [key: string]: boolean | undefined;
-}
-
-// Interfaz principal de usuario
-interface Usuario {
-  id: string;
-  nombre: string;
-  email: string;
-  rol: Rol;
-  token?: string;
-  privilegios?: Privilegios;
-  superAdmin?: boolean;
-}
-
-// Respuesta común de autenticación
-interface RespuestaAuth {
-  mensaje: string;
-  token: string;
-  usuario?: Usuario;
-  admin?: Usuario;
-}
-
-// Perfil retornado por la API
-interface PerfilResponse {
-  _id?: string;
-  nombre?: string;
-  email?: string;
-  rol?: Rol;
-  privilegios?: Privilegios;
-  superAdmin?: boolean;
-}
-
-// Respuesta al crear admin
-interface CrearAdminResponse {
-  mensaje: string;
-  admin?: Usuario;
-}
-
-// Respuesta al listar admins
-interface ListaAdminsResponse {
-  admins: Usuario[];
-  total: number;
-  limitAlcanzado: boolean;
-}
-
-// Respuesta de refresco de token
-interface RefreshTokenResponse {
-  token: string;
-}
-
-// Credenciales de registro
-interface RegistroCredenciales {
-  nombre: string;
-  email: string;
-  password: string;
-}
-
-// Credenciales de login
-interface LoginCredenciales {
-  email: string;
-  password: string;
-}
-
-// Credenciales de login admin
-interface LoginAdminCredenciales extends LoginCredenciales {
-  codigo2FA?: string;
-}
+import { Usuario, UserRole, PerfilResponse, UsuarioLista, CrearAdminResponse } from '../models/user.model';
+import {
+  RespuestaAuth,
+  RefreshTokenResponse,
+} from '../models/auth.response.model';
+import { LoginCredenciales } from '../models/login.request.model';
+import { RegistroCredenciales } from '../models/register-request-model';
 
 @Injectable({
   providedIn: 'root',
@@ -160,31 +91,6 @@ export class AuthService {
       );
   }
 
-  loginAdmin(credenciales: LoginAdminCredenciales): Observable<RespuestaAuth> {
-    this.cargando.next(true);
-    return this.http
-      .post<RespuestaAuth>(`${this.API_URL}/admin/login`, credenciales)
-      .pipe(
-        tap((respuesta) => {
-          if (respuesta.token && respuesta.admin) {
-            this.guardarSesion(respuesta.token, respuesta.admin);
-            this.usuarioActual.next(respuesta.admin);
-          }
-        }),
-        catchError((error) => {
-          this.cargando.next(false);
-          console.error('Error en login de admin:', error);
-          if (error.status === 401) {
-            error.error.mensaje = 'Credenciales de administrador inválidas';
-          } else if (error.status === 403) {
-            error.error.mensaje = 'Acceso denegado. Privilegios insuficientes';
-          }
-          return throwError(() => error);
-        }),
-        tap(() => this.cargando.next(false))
-      );
-  }
-
   cerrarSesion(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
@@ -195,21 +101,18 @@ export class AuthService {
   obtenerPerfil(): Observable<PerfilResponse> {
     const headers = this.obtenerHeaders();
     return this.http
-      .get<PerfilResponse>(`${this.API_URL}/perfil`, { headers })
+      .get<PerfilResponse>(`${this.API_URL}/auth/perfil`, { headers })
       .pipe(
         tap((perfil) => {
           const usuarioActual = this.usuarioActual.value;
           if (!usuarioActual) return;
 
           const usuarioActualizado: Usuario = {
-            ...usuarioActual,
-            id: perfil._id ?? usuarioActual.id,
-            nombre: perfil.nombre ?? usuarioActual.nombre,
-            email: perfil.email ?? usuarioActual.email,
-            rol: perfil.rol ?? usuarioActual.rol,
+            id: perfil._id,
+            nombre: perfil.nombre,
+            email: perfil.email,
+            role: perfil.role,
             token: usuarioActual.token,
-            privilegios: perfil.privilegios ?? usuarioActual.privilegios,
-            superAdmin: perfil.superAdmin ?? usuarioActual.superAdmin,
           };
 
           this.usuarioActual.next(usuarioActualizado);
@@ -224,33 +127,42 @@ export class AuthService {
 
   verificarToken(token: string): Observable<boolean> {
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.get(`${this.API_URL}/perfil`, { headers }).pipe(
+    return this.http.get(`${this.API_URL}/auth/perfil`, { headers }).pipe(
       map(() => true),
       catchError(() => of(false))
     );
   }
 
-  crearAdministrador(datos: Partial<Usuario>): Observable<CrearAdminResponse> {
+  // ✅ Nuevo método: crear usuario admin/webmaster
+  crearUsuarioAdmin(datos: {
+    nombre: string;
+    email: string;
+    password: string;
+    role: UserRole;
+  }): Observable<CrearAdminResponse> {
     const headers = this.obtenerHeaders();
     return this.http
-      .post<CrearAdminResponse>(`${this.API_URL}/admin/crear`, datos, {
-        headers,
-      })
+      .post<CrearAdminResponse>(
+        `${this.API_URL}/admin/users`,
+        datos,
+        { headers }
+      )
       .pipe(
         catchError((error) => {
-          console.error('Error al crear administrador:', error);
+          console.error('Error al crear usuario administrador:', error);
           return throwError(() => error);
         })
       );
   }
 
-  obtenerListaAdministradores(): Observable<ListaAdminsResponse> {
+  // ✅ Nuevo método: obtener lista de usuarios (solo webmaster)
+  obtenerUsuarios(): Observable<{ usuarios:UsuarioLista[] }> {
     const headers = this.obtenerHeaders();
     return this.http
-      .get<ListaAdminsResponse>(`${this.API_URL}/admin/lista`, { headers })
+      .get<{ usuarios: UsuarioLista[] }>(`${this.API_URL}/admin/users`, { headers })
       .pipe(
         catchError((error) => {
-          console.error('Error al obtener lista de administradores:', error);
+          console.error('Error al obtener lista de usuarios:', error);
           return throwError(() => error);
         })
       );
@@ -260,26 +172,19 @@ export class AuthService {
     return !!this.obtenerToken() && !!this.usuarioActual.value;
   }
 
+  // ✅ Actualizado: usa role en lugar de rol
   esAdmin(): boolean {
-    return this.usuarioActual.value?.rol === 'admin';
+    const role = this.usuarioActual.value?.role;
+    return role === 'admin' || role === 'webmaster';
   }
 
-  esSuperAdmin(): boolean {
-    const usuario = this.usuarioActual.value;
-    return usuario?.rol === 'admin' && usuario.superAdmin === true;
+  // ✅ Nuevo método: verifica si es webmaster
+  esWebmaster(): boolean {
+    return this.usuarioActual.value?.role === 'webmaster';
   }
 
   obtenerUsuarioActual(): Usuario | null {
     return this.usuarioActual.value;
-  }
-
-  obtenerPrivilegios(): Privilegios | null {
-    return this.usuarioActual.value?.privilegios || null;
-  }
-
-  tienePrivilegio(privilegio: string): boolean {
-    const privilegios = this.obtenerPrivilegios();
-    return privilegios ? privilegios[privilegio] === true : false;
   }
 
   private guardarSesion(token: string, usuario: Usuario): void {
@@ -301,7 +206,6 @@ export class AuthService {
 
     try {
       const parsed = JSON.parse(userData);
-      // Validación básica de tipo
       if (
         typeof parsed === 'object' &&
         parsed !== null &&
