@@ -5,7 +5,7 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { inject } from '@angular/core';
-import { AuthService } from './auth.service';
+import { AuthService } from '../services/auth.service';
 
 export type Privilegio =
   | 'USERS_READ'
