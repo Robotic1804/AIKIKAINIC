@@ -1,0 +1,261 @@
+<!-- login-modal.component.html -->
+@if (esVisible) {
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-gradient-to-br from-purple-900 to-indigo-900 rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4 animate-fadeIn">
+
+      <!-- Cabecera -->
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-white">Your Account</h2>
+        <button 
+          type="button"
+          (click)="cerrar()"
+          class="text-white hover:text-gray-300 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Pestañas -->
+      <div class="flex mb-6 space-x-2">
+        <button 
+          type="button"
+          (click)="cambiarModo('login')"
+          [class]="modoActual === 'login' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-200'"
+          class="flex-1 py-2 px-4 rounded-lg font-medium transition-colors">
+          Login
+        </button>
+        <button 
+          type="button"
+          (click)="cambiarModo('register')"
+          [class]="modoActual === 'register' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-200'"
+          class="flex-1 py-2 px-4 rounded-lg font-medium transition-colors">
+          Register
+        </button>
+      </div>
+
+      <!-- Mensajes -->
+      @if (errorActual) {
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+          {{ errorActual }}
+        </div>
+      }
+      @if (exitoActual) {
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
+          {{ exitoActual }}
+        </div>
+      }
+
+      <!-- Formulario de Login -->
+      @if (modoActual === 'login') {
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+          <!-- Email -->
+          <div class="mb-4">
+            <label for="email-login" class="block text-gray-300 text-sm font-bold mb-2">
+              Email
+            </label>
+            <input 
+              id="email-login"
+              formControlName="email"
+              type="email"
+              class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              [class.border-red-500]="emailLoginInvalido"
+              placeholder="Enter Email"
+              autocomplete="email">
+            @if (emailLoginInvalido) {
+              <span class="text-red-500 text-xs mt-1 block">
+                Ingrese un email válido
+              </span>
+            }
+          </div>
+
+          <!-- Contraseña -->
+          <div class="mb-6">
+            <label for="password-login" class="block text-gray-300 text-sm font-bold mb-2">
+              Password
+            </label>
+            <input 
+              id="password-login"
+              formControlName="password"
+              type="password"
+              class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              [class.border-red-500]="passwordLoginInvalido"
+              placeholder="Enter Password"
+              autocomplete="current-password">
+            @if (passwordLoginInvalido) {
+              <span class="text-red-500 text-xs mt-1 block">
+                Ingrese su contraseña
+              </span>
+            }
+          </div>
+
+          <!-- Botón Submit -->
+          <button 
+            type="submit"
+            [disabled]="estaCargando || loginForm.invalid"
+            class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+            @if (!estaCargando) {
+              <span>Login</span>
+            } @else {
+              <span class="flex items-center justify-center">
+                <svg class="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+                Logging in...
+              </span>
+            }
+          </button>
+        </form>
+      }
+
+      <!-- Formulario de Registro -->
+      @if (modoActual === 'register') {
+        <form [formGroup]="registerForm" (ngSubmit)="registrar()">
+          <!-- Nombre -->
+          <div class="mb-4">
+            <label for="nombre" class="block text-gray-300 text-sm font-bold mb-2">
+              Name
+            </label>
+            <input 
+              id="nombre"
+              formControlName="nombre"
+              type="text"
+              class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              [class.border-red-500]="nombreInvalido"
+              placeholder="Enter Name"
+              autocomplete="name">
+            @if (nombreInvalido) {
+              <span class="text-red-500 text-xs mt-1 block">
+                El nombre debe tener al menos 3 caracteres
+              </span>
+            }
+          </div>
+
+          <!-- Email -->
+          <div class="mb-4">
+            <label for="email-registro" class="block text-gray-300 text-sm font-bold mb-2">
+              Email
+            </label>
+            <input 
+              id="email-registro"
+              formControlName="email"
+              type="email"
+              class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              [class.border-red-500]="emailRegistroInvalido"
+              placeholder="Enter Email"
+              autocomplete="email">
+            @if (emailRegistroInvalido) {
+              <span class="text-red-500 text-xs mt-1 block">
+                Ingrese un email válido
+              </span>
+            }
+          </div>
+
+          <!-- Edad -->
+          <div class="mb-4">
+            <label for="edad" class="block text-gray-300 text-sm font-bold mb-2">
+              Age
+            </label>
+            <input 
+              id="edad"
+              formControlName="edad"
+              type="number"
+              class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              [class.border-red-500]="edadInvalida"
+              placeholder="Enter Age"
+              min="18"
+              max="120">
+            @if (edadInvalida) {
+              <span class="text-red-500 text-xs mt-1 block">
+                La edad debe estar entre 18 y 120
+              </span>
+            }
+          </div>
+
+          <!-- Contraseña -->
+          <div class="mb-4">
+            <label for="password-registro" class="block text-gray-300 text-sm font-bold mb-2">
+              Password
+            </label>
+            <input 
+              id="password-registro"
+              formControlName="password"
+              type="password"
+              class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              [class.border-red-500]="passwordRegistroInvalido"
+              placeholder="Enter Password"
+              autocomplete="new-password">
+            @if (passwordRegistroInvalido) {
+              <span class="text-red-500 text-xs mt-1 block">
+                La contraseña debe tener al menos 6 caracteres
+              </span>
+            }
+          </div>
+
+          <!-- Confirmar Contraseña -->
+          <div class="mb-4">
+            <label for="confirmar-password" class="block text-gray-300 text-sm font-bold mb-2">
+              Confirm Password
+            </label>
+            <input 
+              id="confirmar-password"
+              formControlName="confirmarPassword"
+              type="password"
+              class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              [class.border-red-500]="confirmarPasswordInvalido"
+              placeholder="Confirm Password"
+              autocomplete="new-password">
+            @if (confirmarPasswordInvalido) {
+              <span class="text-red-500 text-xs mt-1 block">
+                Las contraseñas no coinciden
+              </span>
+            }
+          </div>
+
+          <!-- Teléfono -->
+          <div class="mb-6">
+            <label for="telefono" class="block text-gray-300 text-sm font-bold mb-2">
+              Phone Number
+            </label>
+            <input 
+              id="telefono"
+              formControlName="telefono"
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              [class.border-red-500]="telefonoInvalido"
+              placeholder="Enter Phone Number"
+              maxlength="10"
+              autocomplete="tel">
+            @if (telefonoInvalido) {
+              <span class="text-red-500 text-xs mt-1 block">
+                Ingrese un número de teléfono válido (10 dígitos)
+              </span>
+            }
+          </div>
+
+          <!-- Botón Submit -->
+          <button 
+            type="submit"
+            [disabled]="estaCargando || registerForm.invalid"
+            class="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white font-bold py-3 px-4 rounded-lg hover:from-purple-600 hover:to-pink-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+            @if (!estaCargando) {
+              <span>Submit</span>
+            } @else {
+              <span class="flex items-center justify-center">
+                <svg class="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+                Registering...
+              </span>
+            }
+          </button>
+        </form>
+      }
+
+    </div>
+  </div>
+}

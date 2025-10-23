@@ -89,7 +89,7 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     loadComponent: () =>
-      import('./app/pages/dashboard/dashboard.component').then(
+      import('./app/admin/Dashboard/dashboard.component').then(
         (m) => m.DashboardComponent
       ),
     // canActivate: [authGuard], // Descomentar cuando implementes el guard
@@ -111,7 +111,7 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         loadComponent: () =>
-          import('./app/pages/admin/dashboard/admin-dashboard.component').then(
+          import('./app/admin/admin-dashboard/admin-dashboard.component').then(
             (m) => m.AdminDashboardComponent
           ),
         title: 'Admin Dashboard',
