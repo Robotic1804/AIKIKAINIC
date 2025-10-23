@@ -16,7 +16,7 @@
       </a>
 
       <!-- Desktop Menu -->
-      <div class="hidden md:flex items-center space-x-1" role="menubar">
+      <div class="hidden md:flex items-center space-x-1" role="menubar" role="menubar">
         <a routerLink="/" 
            routerLinkActive="nav-active"
            [routerLinkActiveOptions]="{exact:true}"
@@ -66,51 +66,14 @@
           <span class="nav-underline"></span>
         </a>
         
-        <!-- Contenedor del botón y menú -->
-<div class="relative inline-block text-left" (clickOutside)="closeMenu()">
-  <!-- Botón principal -->
-  <button
-    routerLink="/auth-menu"
-    class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow transition"
-  >
-    Ingresar
-  </button>
 
-  <!-- Menú desplegable -->
-  @if (showMenu) {
-    <div class="absolute right-0 mt-2 w-56 origin-top-right bg-white border border-gray-200 rounded shadow-lg z-50">
-      <div class="py-1">
-        <a
-          (click)="navigateTo('/register')"
-          (keyup.enter)="navigateTo('/register')"
-          (keyup.space)="navigateTo('/register')"
-          tabindex="0"
-          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-        >
-          Registrarse
-        </a>
-        <a
-          (click)="navigateTo('/login')"
-          (keyup.enter)="navigateTo('/login')"
-          (keyup.space)="navigateTo('/login')"
-          tabindex="0"
-          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-        >
-          Ingresar como Usuario
-        </a>
-        <a
-          (click)="navigateTo('/admin')"
-          (keyup.enter)="navigateTo('/admin')"
-          (keyup.space)="navigateTo('/admin')"
-          tabindex="0"
-          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-        >
-          Ingresar como Administrador
-        </a>
-      </div>
-    </div>
-  }
-</div>
+<button
+  type="button"
+  (click)="abrirLogin()"
+  class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow transition"
+  aria-label="Abrir formulario de autenticación">
+  Ingresar
+</button>
       </div>
 
       <!-- Mobile Menu Button -->
@@ -206,15 +169,16 @@
         Aiki-Face
       </a>
       
-      <div class="pt-2 pb-1">
-        <a routerLink="/login" 
-           (click)="closeMenu()"
-           class="block mx-4 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white text-center font-semibold rounded-lg hover:from-red-700 hover:to-red-800 transform hover:scale-105 transition-all duration-200 shadow-lg"
-           role="menuitem"
-           tabindex="0">
-          Ingresar
-        </a>
-      </div>
-    </div>
+<div class="pt-2 pb-1">
+    <button
+      type="button"
+      (click)="abrirLogin(); closeMenu();"
+      class="block mx-4 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white text-center font-semibold rounded-lg hover:from-red-700 hover:to-red-800 transform hover:scale-105 transition-all duration-200 shadow-lg"
+      aria-label="Abrir formulario de autenticación">
+      Ingresar
+    </button>
   </div>
+</div>
+    </div>
+  
 </nav>

@@ -13,6 +13,7 @@ import {
   RouterLinkActive,
 } from '@angular/router';
 import { filter, Subject, takeUntil } from 'rxjs';
+import { ModalService } from 'src/app/services/modal.service';
 
 @Component({
   selector: 'app-navbar',
@@ -24,12 +25,13 @@ import { filter, Subject, takeUntil } from 'rxjs';
 export class NavbarComponent implements OnInit, OnDestroy {
   isMenuOpen = false;
   isScrolled = false;
-  showMenu = false;
-  isLoginMenuOpen = false; // ⬅️ Para el menú del botón "Ingresar"
+
+
 
   private destroy$ = new Subject<void>();
   private router = inject(Router);
   private renderer = inject(Renderer2);
+  private modalService = inject(ModalService);
 
   ngOnInit(): void {
     // Cerrar menú móvil al cambiar de ruta
@@ -40,7 +42,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.closeMenu();
-        this.closeLoginMenu(); // ⬅️ Cierra el menú de login también
+       
       });
 
     this.checkScroll();
@@ -77,9 +79,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   @HostListener('document:keydown.escape', ['$event'])
   onEscapeKey(event: KeyboardEvent): void {
-    if (this.isMenuOpen || this.isLoginMenuOpen) {
+    if (this.isMenuOpen) {
       this.closeMenu();
-      this.closeLoginMenu();
+      
       event.preventDefault();
     }
   }
@@ -94,19 +96,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return [this.isScrolled ? 'scrolled' : 'at-top'];
   }
 
-  // =============================
-  // 🔽 Lógica del menú de ingresar
-  // =============================
-  toggleLoginMenu(): void {
-    this.isLoginMenuOpen = !this.isLoginMenuOpen;
+  abrirLogin() {
+    this.modalService.abrirLoginModal();
   }
 
-  closeLoginMenu(): void {
-    this.isLoginMenuOpen = false;
-  }
 
-  navigateTo(path: string): void {
-    this.closeLoginMenu();
-    this.router.navigate([path]);
-  }
 }
