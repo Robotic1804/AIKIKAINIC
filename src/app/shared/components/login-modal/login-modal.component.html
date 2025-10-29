@@ -1,35 +1,44 @@
 <!-- login-modal.component.html -->
 @if (esVisible) {
-  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-gradient-to-br from-purple-900 to-indigo-900 rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4 animate-fadeIn">
+  <!-- Backdrop con blur -->
+  <div class="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-[9999]">
+    
+    <!-- Modal con animación condicional -->
+    <div #modalElement
+      [class.crumple-exit]="estaAnimandoCierre()"
+      class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4 animate-fadeIn">
 
       <!-- Cabecera -->
       <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold text-white">Your Account</h2>
+        <h2 class="text-2xl font-bold text-gray-900">Your Account</h2>
         <button 
           type="button"
           (click)="cerrar()"
-          class="text-white hover:text-gray-300 transition-colors">
+          class="text-gray-600 hover:text-gray-900 transition-colors cursor-pointer">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
           </svg>
         </button>
       </div>
 
-      <!-- Pestañas -->
-      <div class="flex mb-6 space-x-2">
+      <!-- Pestañas estilo botones japoneses -->
+      <div class="flex mb-6 gap-4">
         <button 
           type="button"
           (click)="cambiarModo('login')"
-          [class]="modoActual === 'login' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-200'"
-          class="flex-1 py-2 px-4 rounded-lg font-medium transition-colors">
+          [class]="modoActual === 'login' 
+            ? 'bg-red-600 text-white border-2 border-red-600' 
+            : 'bg-transparent text-red-600 border-2 border-red-600 hover:bg-red-50'"
+          class="flex-1 py-3 rounded-lg font-semibold transition-all cursor-pointer">
           Login
         </button>
         <button 
           type="button"
           (click)="cambiarModo('register')"
-          [class]="modoActual === 'register' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-200'"
-          class="flex-1 py-2 px-4 rounded-lg font-medium transition-colors">
+          [class]="modoActual === 'register' 
+            ? 'bg-red-600 text-white border-2 border-red-600' 
+            : 'bg-transparent text-red-600 border-2 border-red-600 hover:bg-red-50'"
+          class="flex-1 py-3 rounded-lg font-semibold transition-all cursor-pointer">
           Register
         </button>
       </div>
@@ -51,14 +60,14 @@
         <form [formGroup]="loginForm" (ngSubmit)="login()">
           <!-- Email -->
           <div class="mb-4">
-            <label for="email-login" class="block text-gray-300 text-sm font-bold mb-2">
+            <label for="email-login" class="block text-gray-700 text-sm font-bold mb-2">
               Email
             </label>
             <input 
               id="email-login"
               formControlName="email"
               type="email"
-              class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
               [class.border-red-500]="emailLoginInvalido"
               placeholder="Enter Email"
               autocomplete="email">
@@ -71,14 +80,14 @@
 
           <!-- Contraseña -->
           <div class="mb-6">
-            <label for="password-login" class="block text-gray-300 text-sm font-bold mb-2">
+            <label for="password-login" class="block text-gray-700 text-sm font-bold mb-2">
               Password
             </label>
             <input 
               id="password-login"
               formControlName="password"
               type="password"
-              class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
               [class.border-red-500]="passwordLoginInvalido"
               placeholder="Enter Password"
               autocomplete="current-password">
@@ -93,7 +102,7 @@
           <button 
             type="submit"
             [disabled]="estaCargando || loginForm.invalid"
-            class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+            class="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
             @if (!estaCargando) {
               <span>Login</span>
             } @else {
@@ -114,14 +123,14 @@
         <form [formGroup]="registerForm" (ngSubmit)="registrar()">
           <!-- Nombre -->
           <div class="mb-4">
-            <label for="nombre" class="block text-gray-300 text-sm font-bold mb-2">
+            <label for="nombre" class="block text-gray-700 text-sm font-bold mb-2">
               Name
             </label>
             <input 
               id="nombre"
               formControlName="nombre"
               type="text"
-              class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
               [class.border-red-500]="nombreInvalido"
               placeholder="Enter Name"
               autocomplete="name">
@@ -134,14 +143,14 @@
 
           <!-- Email -->
           <div class="mb-4">
-            <label for="email-registro" class="block text-gray-300 text-sm font-bold mb-2">
+            <label for="email-registro" class="block text-gray-700 text-sm font-bold mb-2">
               Email
             </label>
             <input 
               id="email-registro"
               formControlName="email"
               type="email"
-              class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
               [class.border-red-500]="emailRegistroInvalido"
               placeholder="Enter Email"
               autocomplete="email">
@@ -154,14 +163,14 @@
 
           <!-- Edad -->
           <div class="mb-4">
-            <label for="edad" class="block text-gray-300 text-sm font-bold mb-2">
+            <label for="edad" class="block text-gray-700 text-sm font-bold mb-2">
               Age
             </label>
             <input 
               id="edad"
               formControlName="edad"
               type="number"
-              class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
               [class.border-red-500]="edadInvalida"
               placeholder="Enter Age"
               min="18"
@@ -175,14 +184,14 @@
 
           <!-- Contraseña -->
           <div class="mb-4">
-            <label for="password-registro" class="block text-gray-300 text-sm font-bold mb-2">
+            <label for="password-registro" class="block text-gray-700 text-sm font-bold mb-2">
               Password
             </label>
             <input 
               id="password-registro"
               formControlName="password"
               type="password"
-              class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
               [class.border-red-500]="passwordRegistroInvalido"
               placeholder="Enter Password"
               autocomplete="new-password">
@@ -195,14 +204,14 @@
 
           <!-- Confirmar Contraseña -->
           <div class="mb-4">
-            <label for="confirmar-password" class="block text-gray-300 text-sm font-bold mb-2">
+            <label for="confirmar-password" class="block text-gray-700 text-sm font-bold mb-2">
               Confirm Password
             </label>
             <input 
               id="confirmar-password"
               formControlName="confirmarPassword"
               type="password"
-              class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
               [class.border-red-500]="confirmarPasswordInvalido"
               placeholder="Confirm Password"
               autocomplete="new-password">
@@ -215,7 +224,7 @@
 
           <!-- Teléfono -->
           <div class="mb-6">
-            <label for="telefono" class="block text-gray-300 text-sm font-bold mb-2">
+            <label for="telefono" class="block text-gray-700 text-sm font-bold mb-2">
               Phone Number
             </label>
             <input 
@@ -224,7 +233,7 @@
               type="text"
               inputmode="numeric"
               pattern="[0-9]*"
-              class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
               [class.border-red-500]="telefonoInvalido"
               placeholder="Enter Phone Number"
               maxlength="10"
@@ -240,7 +249,7 @@
           <button 
             type="submit"
             [disabled]="estaCargando || registerForm.invalid"
-            class="w-full bg-gradient-to-r from-purple-500 to-pink-600 text-white font-bold py-3 px-4 rounded-lg hover:from-purple-600 hover:to-pink-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+            class="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
             @if (!estaCargando) {
               <span>Submit</span>
             } @else {

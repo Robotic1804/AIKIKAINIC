@@ -1,4 +1,4 @@
-import { Component, inject, effect, signal, OnInit } from '@angular/core';
+import { Component, inject, effect, signal, OnInit, ViewChild,ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -12,6 +12,7 @@ import { AuthService } from 'src/app/features/auth/services/auth.service';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ModalService } from 'src/app/services/modal.service';
+import { gsap } from "gsap";
 
 // Tipos
 type Modo = 'login' | 'register';
@@ -43,7 +44,8 @@ export class LoginModalComponent implements OnInit {
   mensajeError = signal<string>('');
   mensajeExito = signal<string>('');
   cargando = signal<boolean>(false);
-  visible = signal<boolean>(false); // Controla si el modal se muestra
+  visible = signal<boolean>(false);
+  estaAnimandoCierre = signal<boolean>(false);
 
   // Formularios
   loginForm!: FormGroup;
@@ -53,7 +55,7 @@ export class LoginModalComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   private modalService = inject(ModalService);
-
+  @ViewChild('modalElement') modalElement!: ElementRef;
   constructor() {
     this.inicializarFormularios();
 
@@ -64,13 +66,10 @@ export class LoginModalComponent implements OnInit {
     });
   }
 
-
-
   ngOnInit(): void {
     // Si ya está autenticado, no mostrar el modal
     if (this.authService.estaAutenticado()) {
       this.router.navigate(['/dashboard']);
-
     }
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && this.visible()) {
@@ -181,13 +180,56 @@ export class LoginModalComponent implements OnInit {
     this.modo.set(nuevoModo);
     this.limpiarMensajes();
   }
-
   cerrar(): void {
-    this.visible.set(false);
-    this.modo.set('login');
-    this.loginForm.reset();
-    this.registerForm.reset();
-    this.limpiarMensajes();
+    if (!this.modalElement?.nativeElement) {
+      console.error('❌ Modal element no existe');
+      return;
+    }
+
+    this.estaAnimandoCierre.set(true);
+    const element = this.modalElement.nativeElement;
+
+    // Timeline para efecto más realista
+    const tl = gsap.timeline({
+      onComplete: () => {
+        this.estaAnimandoCierre.set(false);
+        this.visible.set(false);
+        this.modalService.cerrarLoginModal();
+        this.modo.set('login');
+        this.loginForm.reset();
+        this.registerForm.reset();
+        this.limpiarMensajes();
+      },
+    });
+
+    // Paso 1: Comienza a comprimirse
+    tl.to(element, {
+      duration: 0.2,
+      scaleY: 0.8,
+      scaleX: 0.9,
+      transformOrigin: 'bottom right',
+      ease: 'power1.in',
+    });
+
+    // Paso 2: Se estira mientras se succiona
+    tl.to(element, {
+      duration: 0.3,
+      scaleY: 0.1,
+      scaleX: 0.4,
+      y: 150,
+      x: 80,
+      ease: 'power2.in',
+      opacity: 0.5,
+    });
+
+    // Paso 3: Desaparece completamente en el punto
+    tl.to(element, {
+      duration: 0.15,
+      scaleY: 0,
+      scaleX: 0,
+      opacity: 0,
+      ease: 'power2.in',
+    });
   }
 
   abrir(): void {

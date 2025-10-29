@@ -1,31 +1,27 @@
-import { Injectable, inject } from '@angular/core';
-import {
-  CanActivate,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  UrlTree,
-  Router,
-} from '@angular/router';
+// src/app/features/auth/guards/admin.guard.ts
+import { inject } from '@angular/core';
+import { CanActivateFn } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { ModalService } from '../../../services/modal.service';
+import { Router } from '@angular/router';
 
-@Injectable({ providedIn: 'root' })
-export class AdminGuard implements CanActivate {
-  private authService = inject(AuthService);
-  private router = inject(Router);
+export const adminGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
+  const modalService = inject(ModalService);
+  const router = inject(Router);
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): boolean | UrlTree {
-    const isAuth = this.authService.estaAutenticado();
-    const isAdmin = this.authService.esAdmin();
+  const isAuth = authService.estaAutenticado();
+  const isAdmin = authService.esAdmin(); // ← ya incluye 'webmaster'
 
-    if (isAuth && isAdmin) return true;
-
-    // redirige sin side-effects
-    const target = isAuth ? ['/dashboard'] : ['/auth'];
-    return this.router.createUrlTree(target, {
-      queryParams: { returnUrl: state.url },
-    });
+  if (isAuth && isAdmin) {
+    return true;
   }
-}
+
+  if (!isAuth) {
+    modalService.abrirLoginModal();
+    return false;
+  }
+
+  // Autenticado pero no admin → dashboard
+  return router.createUrlTree(['/dashboard']);
+};

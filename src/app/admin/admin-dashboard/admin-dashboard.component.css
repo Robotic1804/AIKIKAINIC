@@ -1,0 +1,8 @@
+/* admin-dashboard.component.css */
+button {
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}

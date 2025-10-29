@@ -1,12 +1,11 @@
-<!-- navbar.component.html -->
-<nav class="navbar bg-white/95 backdrop-blur-md shadow-lg sticky top-0 z-50 transition-all duration-300" 
+<nav class="navbar bg-white/95 backdrop-blur-md shadow-lg sticky top-0 z-[200] transition-all duration-300" 
      role="navigation" 
      aria-label="Navegación principal">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
       
       <!-- Logo con texto en japonés -->
-      <a routerLink="/aikido"
+      <a routerLink="/"
          class="logo-link text-2xl font-bold text-gray-900 hover:text-red-600 transition-colors duration-300"
          aria-label="Inicio - Aikido">
         <span class="bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent japanese-text">
@@ -16,7 +15,7 @@
       </a>
 
       <!-- Desktop Menu -->
-      <div class="hidden md:flex items-center space-x-1" role="menubar" role="menubar">
+      <div class="hidden md:flex items-center space-x-1" role="menubar">
         <a routerLink="/" 
            routerLinkActive="nav-active"
            [routerLinkActiveOptions]="{exact:true}"
@@ -66,14 +65,148 @@
           <span class="nav-underline"></span>
         </a>
         
+    
+@if (estaAutenticado()) {
+  <div class="relative">
+    <!-- Botón principal con avatar y nombre -->
+    <button 
+      (click)="toggleUserMenu($event)"
+      (keydown.enter)="toggleUserMenu($event)"
+      (keydown.space)="toggleUserMenu($event); $event.preventDefault()"
+      class="flex items-center space-x-2 text-gray-700 hover:text-red-600 focus:outline-none transition"
+      [attr.aria-expanded]="userMenuOpen()"
+      aria-haspopup="true">
+      <!-- Avatar circular -->
+      <div class="w-8 h-8 rounded-full bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center">
+        <span class="text-white font-semibold text-sm">
+          {{ usuarioNombre().charAt(0).toUpperCase() }}
+        </span>
+      </div>
+      <span class="font-medium hidden md:block">{{ usuarioNombre() }}</span>
+      <!-- Icono de flecha -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform" 
+           [class.rotate-180]="userMenuOpen()" 
+           fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
+    </button>
 
-<button
-  type="button"
-  (click)="abrirLogin()"
-  class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow transition"
-  aria-label="Abrir formulario de autenticación">
-  Ingresar
-</button>
+    <!-- Menú desplegable controlado por señal -->
+   <!-- Menú desplegable controlado por señal -->
+@if (userMenuOpen()) {
+  <div class="user-dropdown"
+       (click)="$event.stopPropagation()"
+       (keydown)="$event.stopPropagation()"
+       role="menu"
+       tabindex="-1">
+    
+    <!-- Perfil -->
+    <a 
+      routerLink="/dashboard"
+      (click)="userMenuOpen.set(false)"
+      class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors duration-150"
+      role="menuitem">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      </svg>
+      Mi Perfil
+    </a>
+
+    <!-- Mis Clases / Horario -->
+    <a 
+      routerLink="/mis-clases"
+      (click)="userMenuOpen.set(false)"
+      class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors duration-150"
+      role="menuitem">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+      Mis Clases
+    </a>
+
+    <!-- Mi Progreso / Graduaciones -->
+    <a 
+      routerLink="/mi-progreso"
+      (click)="userMenuOpen.set(false)"
+      class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors duration-150"
+      role="menuitem">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+      </svg>
+      Mi Progreso
+    </a>
+
+    <!-- Divisor -->
+    <div class="border-t border-gray-100 my-2"></div>
+
+    <!-- Configuración -->
+    <a 
+      routerLink="/configuracion"
+      (click)="userMenuOpen.set(false)"
+      class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors duration-150"
+      role="menuitem">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+      Configuración
+    </a>
+
+    <!-- Notificaciones -->
+    <a 
+      routerLink="/notificaciones"
+      (click)="userMenuOpen.set(false)"
+      class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors duration-150"
+      role="menuitem">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+      </svg>
+      Notificaciones
+      @if (tieneNotificacionesSinLeer()) {
+        <span class="ml-auto bg-red-500 text-white text-xs rounded-full px-2 py-0.5">
+          {{ numeroNotificaciones() }}
+        </span>
+      }
+    </a>
+
+    <!-- Ayuda -->
+    <a 
+      routerLink="/ayuda"
+      (click)="userMenuOpen.set(false)"
+      class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors duration-150"
+      role="menuitem">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      Ayuda
+    </a>
+
+    <!-- Divisor -->
+    <div class="border-t border-gray-100 my-2"></div>
+
+    <!-- Cerrar sesión -->
+    <button 
+      type="button"
+      (click)="cerrarSesion(); userMenuOpen.set(false)"
+      (keydown.enter)="cerrarSesion(); userMenuOpen.set(false)"
+      (keydown.space)="cerrarSesion(); userMenuOpen.set(false)"
+      class="flex items-center px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors duration-150 cursor-pointer font-medium w-full text-left"
+      role="menuitem">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+      </svg>
+      Cerrar sesión
+    </button>
+  </div>
+}
+  </div>
+} @else {
+  <button 
+    (click)="abrirLogin()"
+    class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-lg font-medium transition transform hover:scale-105 shadow-md hover:shadow-lg">
+    Ingresar
+  </button>
+}
       </div>
 
       <!-- Mobile Menu Button -->
@@ -110,7 +243,7 @@
   <!-- Mobile Menu -->
   <div [class.hidden]="!isMenuOpen" 
        id="mobile-menu"
-       class="md:hidden border-t border-gray-100 mobile-menu"
+       class="md:hidden border-t border-gray-100 mobile-menu z-[200]"
        role="menu">
     <div class="px-2 pt-2 pb-3 space-y-1">
       
@@ -133,7 +266,7 @@
         Aikido
       </a>
       
-      <a routerLink="/historia" 
+      <a routerLink="/aikidoHistoria" 
          (click)="closeMenu()"
          routerLinkActive="mobile-nav-active"
          class="mobile-nav-link"
@@ -169,16 +302,37 @@
         Aiki-Face
       </a>
       
-<div class="pt-2 pb-1">
-    <button
-      type="button"
-      (click)="abrirLogin(); closeMenu();"
-      class="block mx-4 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white text-center font-semibold rounded-lg hover:from-red-700 hover:to-red-800 transform hover:scale-105 transition-all duration-200 shadow-lg"
-      aria-label="Abrir formulario de autenticación">
-      Ingresar
-    </button>
-  </div>
-</div>
+      <!-- Menú condicional: autenticado vs anónimo (mobile) -->
+      @if (estaAutenticado()) {
+        <div class="pt-2 pb-1 space-y-1">
+          <button
+            type="button"
+            (click)="irADashboard(); closeMenu();"
+            class="block mx-4 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center font-semibold rounded-lg hover:from-blue-700 hover:to-blue-800 transform hover:scale-105 transition-all duration-200 shadow-lg">
+            Dashboard
+          </button>
+          
+        
+          <button
+            type="button"
+            (click)="cerrarSesion(); closeMenu();"
+            (keydown.enter)="cerrarSesion(); closeMenu();"
+            (keydown.space)="cerrarSesion(); closeMenu();"
+            class="block mx-4 px-6 py-3 text-gray-700 text-center font-medium hover:text-red-600 cursor-pointer transition-colors duration-200 w-full">
+            Cerrar sesión
+          </button>
+        </div>
+      } @else {
+        <div class="pt-2 pb-1">
+          <button
+            type="button"
+            (click)="abrirLogin(); closeMenu();"
+            class="block mx-4 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white text-center font-semibold rounded-lg hover:from-red-700 hover:to-red-800 transform hover:scale-105 transition-all duration-200 shadow-lg"
+            aria-label="Abrir formulario de autenticación">
+            Ingresar
+          </button>
+        </div>
+      }
     </div>
-  
+  </div>
 </nav>

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AuthMenuComponent } from './auth-menu.component';
+import { VerificarEmailComponent } from './verificar-email.component';
 
-describe('AuthMenuComponent', () => {
-  let component: AuthMenuComponent;
-  let fixture: ComponentFixture<AuthMenuComponent>;
+describe('VerificarEmailComponent', () => {
+  let component: VerificarEmailComponent;
+  let fixture: ComponentFixture<VerificarEmailComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AuthMenuComponent]
+      imports: [VerificarEmailComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AuthMenuComponent);
+    fixture = TestBed.createComponent(VerificarEmailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

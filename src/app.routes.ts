@@ -1,4 +1,7 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './app/features/auth/guards/auth.guard';
+import { adminGuard } from './app/features/auth/guards/admin.guard';
+import { webmasterGuard } from './app/features/auth/guards/webmastern.guard';
 
 export const routes: Routes = [
   // ==========================================
@@ -14,14 +17,7 @@ export const routes: Routes = [
   // ==========================================
   // AUTENTICACIÓN
   // ==========================================
-  {
-    path: 'auth',
-    loadComponent: () =>
-      import('./app/shared/components/auth-menu/auth-menu.component').then(
-        (m) => m.AuthComponent
-      ),
-    title: 'Autenticación',
-  },
+
 
   // ==========================================
   // INFORMACIÓN DE AIKIDO
@@ -83,16 +79,33 @@ export const routes: Routes = [
     title: 'Aiki Face',
   },
 
+  {
+    path: 'admin/dashboard',
+    loadComponent: () =>
+      import('./app/admin/admin-dashboard/admin-dashboard.component').then(
+        (m) => m.AdminDashboardComponent
+      ),
+    canActivate: [adminGuard],
+  },
+
   // ==========================================
   // ÁREA DE USUARIOS (Protegida)
   // ==========================================
+  {
+    path: 'webmaster/admins',
+    loadComponent: () =>
+      import('./app/webmaster/gestion-admins/gestion-admins.component').then(
+        (m) => m.GestionAdminsComponent
+      ),
+    canActivate: [webmasterGuard],
+  },
   {
     path: 'dashboard',
     loadComponent: () =>
       import('./app/admin/Dashboard/dashboard.component').then(
         (m) => m.DashboardComponent
       ),
-    // canActivate: [authGuard], // Descomentar cuando implementes el guard
+    canActivate: [authGuard],
     title: 'Dashboard',
   },
 
@@ -101,22 +114,13 @@ export const routes: Routes = [
   // ==========================================
   {
     path: 'admin',
-    // canActivate: [adminGuard], // Descomentar cuando implementes el guard
+    canActivate: [adminGuard],
     children: [
       {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',
       },
-      {
-        path: 'dashboard',
-        loadComponent: () =>
-          import('./app/admin/admin-dashboard/admin-dashboard.component').then(
-            (m) => m.AdminDashboardComponent
-          ),
-        title: 'Admin Dashboard',
-      },
-      // Agregar más rutas de admin aquí si las necesitas
     ],
   },
 

@@ -1,1 +1,46 @@
-<p>dashboard works!</p>
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <div class="bg-white rounded-xl shadow-lg p-6">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Mi Panel</h1>
+    
+    @if (usuario) {
+      <p class="text-gray-600 mb-6">
+        ¡Hola, <strong>{{ usuario.nombre }}</strong>! Bienvenido a tu panel personal.
+      </p>
+    }
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Tarjeta: Galería -->
+      <div class="border border-blue-200 rounded-lg p-5 hover:shadow-md transition">
+        <h2 class="text-xl font-semibold text-blue-800 mb-2">Galería</h2>
+        <p class="text-gray-600 mb-4">Explora fotos de entrenamientos y eventos</p>
+        <button 
+          routerLink="/galeria"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+          Ver Galería
+        </button>
+      </div>
+
+      <!-- Tarjeta: Aiki-Face -->
+      <div class="border border-green-200 rounded-lg p-5 hover:shadow-md transition">
+        <h2 class="text-xl font-semibold text-green-800 mb-2">Aiki-Face</h2>
+        <p class="text-gray-600 mb-4">Conecta con la comunidad de Aikido</p>
+        <button 
+          routerLink="/aiki-face"
+          class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+          Ir a Aiki-Face
+        </button>
+      </div>
+
+      <!-- Tarjeta: Perfil -->
+      <div class="border border-gray-200 rounded-lg p-5 hover:shadow-md transition">
+        <h2 class="text-xl font-semibold text-gray-800 mb-2">Mi Perfil</h2>
+        <p class="text-gray-600 mb-4">Actualiza tu información personal</p>
+        <button 
+          (click)="irAPerfil()"
+          class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+          Editar Perfil
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

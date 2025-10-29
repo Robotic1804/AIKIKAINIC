@@ -1,18 +1,57 @@
 /* ========================================
-   ESTILOS NAVBAR - AIKIDO
+   ESTILOS NAVBAR - AIKIDO (OPTIMIZADO)
    ======================================== */
+
+/* ========================================
+   JERARQUÍA DE Z-INDEX (DOCUMENTADA)
+   ======================================== */
+/*
+  Z-Index Hierarchy:
+  - Hero Section: z-index: 1
+  - Hero Content: z-index: 10
+  - Navbar: z-index: 200
+  - Mobile Menu: z-index: 200
+  - User Dropdown: z-index: 9999
+*/
+
+/* ========================================
+   BASE Y RESET
+   ======================================== */
+body {
+  padding-top: 0;
+  margin: 0;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+/* ========================================
+   NAVBAR - CONFIGURACIÓN BASE
+   ======================================== */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  overflow: visible;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.navbar > div {
+  overflow: visible;
+}
 
 /* ========================================
    LOGO Y TEXTO JAPONÉS
    ======================================== */
-
 .japanese-text {
   font-family: 'Noto Serif JP', 'Yu Gothic', 'Yu Mincho', serif;
   font-size: 2rem;
   font-weight: 700;
   letter-spacing: 0.05em;
-  position: relative;
-  display: inline-block;
   text-shadow: 0 2px 4px rgba(220, 38, 38, 0.1);
 }
 
@@ -40,7 +79,6 @@
 /* ========================================
    NAVEGACIÓN DESKTOP
    ======================================== */
-
 .nav-link {
   padding: 0.5rem 1rem;
   color: #374151;
@@ -70,7 +108,6 @@
   width: 100%;
 }
 
-/* Aumentar especificidad sin !important */
 a.nav-link.nav-active {
   color: #DC2626;
   font-weight: 600;
@@ -80,51 +117,112 @@ a.nav-link.nav-active .nav-underline {
   width: 100%;
 }
 
-/* Botón de Login */
-.btn-login {
-  margin-left: 1rem;
-  padding: 0.625rem 1.5rem;
-  background: linear-gradient(135deg, #DC2626, #991B1B);
-  color: white;
-  font-weight: 600;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.3);
-  transition: all 0.2s ease;
+/* ========================================
+   USER DROPDOWN MENU - SIN !IMPORTANT
+   ======================================== */
+
+/* Contenedor del botón de usuario */
+nav.navbar .relative {
   position: relative;
-  overflow: hidden;
+  z-index: auto;
 }
 
-.btn-login::before {
-  content: '';
+/* Dropdown del usuario */
+nav.navbar .user-dropdown {
   position: absolute;
-  top: 0;
-  left: -100%;
+  right: 0;
+  top: 100%;
+  margin-top: 0.5rem;
+  min-width: 14rem;
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+    0 10px 10px -5px rgba(0, 0, 0, 0.04),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+  padding: 0.5rem 0;
+  z-index: 9999;
+  border: 1px solid rgba(229, 231, 235, 0.8);
+  transform-origin: top right;
+  animation: dropdownFadeIn 0.15s ease-out forwards;
+  max-height: calc(100vh - 6rem);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Items del dropdown */
+nav.navbar .user-dropdown a,
+nav.navbar .user-dropdown button {
+  display: flex;
+  align-items: center;
   width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s ease;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.btn-login:hover::before {
-  left: 100%;
+nav.navbar .user-dropdown a:hover,
+nav.navbar .user-dropdown button:hover {
+  background-color: #F9FAFB;
+  color: #DC2626;
 }
 
-.btn-login:hover {
-  background: linear-gradient(135deg, #991B1B, #7F1D1D);
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.4);
+/* Divisores */
+nav.navbar .user-dropdown .border-t {
+  margin: 0.5rem 0;
+  border-color: #F3F4F6;
 }
 
-.btn-login:active {
-  transform: translateY(0) scale(1);
+/* Badge de notificaciones */
+nav.navbar .user-dropdown .bg-red-500 {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Scroll personalizado */
+nav.navbar .user-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+nav.navbar .user-dropdown::-webkit-scrollbar-track {
+  background: #F3F4F6;
+  border-radius: 10px;
+}
+
+nav.navbar .user-dropdown::-webkit-scrollbar-thumb {
+  background: #DC2626;
+  border-radius: 10px;
+}
+
+nav.navbar .user-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #991B1B;
+}
+
+/* Asegurar que los SVG no rompan el layout */
+nav.navbar .user-dropdown svg {
+  flex-shrink: 0;
 }
 
 /* ========================================
    NAVEGACIÓN MÓVIL
    ======================================== */
-
 .mobile-menu-btn {
- 
   justify-content: center;
   padding: 0.5rem;
   border-radius: 0.5rem;
@@ -174,7 +272,6 @@ a.mobile-nav-link.mobile-nav-active {
 /* ========================================
    ANIMACIONES
    ======================================== */
-
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -197,65 +294,21 @@ a.mobile-nav-link.mobile-nav-active {
   }
 }
 
-/* Animación escalonada para items del menú móvil */
-.mobile-menu a:nth-child(1) {
-  animation: fadeInUp 0.3s ease-out 0.05s both;
-}
-
-.mobile-menu a:nth-child(2) {
-  animation: fadeInUp 0.3s ease-out 0.1s both;
-}
-
-.mobile-menu a:nth-child(3) {
-  animation: fadeInUp 0.3s ease-out 0.15s both;
-}
-
-.mobile-menu a:nth-child(4) {
-  animation: fadeInUp 0.3s ease-out 0.2s both;
-}
-
-.mobile-menu a:nth-child(5) {
-  animation: fadeInUp 0.3s ease-out 0.25s both;
-}
-
-.mobile-menu a:nth-child(6) {
-  animation: fadeInUp 0.3s ease-out 0.3s both;
-}
+/* Animación escalonada para menú móvil */
+.mobile-menu > div > a:nth-child(1) { animation: fadeInUp 0.3s ease-out 0.05s both; }
+.mobile-menu > div > a:nth-child(2) { animation: fadeInUp 0.3s ease-out 0.1s both; }
+.mobile-menu > div > a:nth-child(3) { animation: fadeInUp 0.3s ease-out 0.15s both; }
+.mobile-menu > div > a:nth-child(4) { animation: fadeInUp 0.3s ease-out 0.2s both; }
+.mobile-menu > div > a:nth-child(5) { animation: fadeInUp 0.3s ease-out 0.25s both; }
+.mobile-menu > div > a:nth-child(6) { animation: fadeInUp 0.3s ease-out 0.3s both; }
 
 /* ========================================
-   EFECTO SCROLL (OPCIONAL)
+   SCROLL Y BODY LOCK
    ======================================== */
-
-.navbar.at-top {
-  background: transparent;
-  box-shadow: none;
-}
-
-.navbar.scrolled {
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-}
-
-/* ========================================
-   BACKDROP BLUR MEJORADO
-   ======================================== */
-
-@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
-  .navbar {
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-  }
-}
-
-/* ========================================
-   SCROLL SUAVE
-   ======================================== */
-
 html {
   scroll-behavior: smooth;
 }
 
-/* Prevenir scroll cuando el menú móvil está abierto */
 body.menu-open {
   overflow: hidden;
   height: 100vh;
@@ -264,7 +317,6 @@ body.menu-open {
 /* ========================================
    ACCESIBILIDAD
    ======================================== */
-
 a:focus-visible,
 button:focus-visible {
   outline: 2px solid #DC2626;
@@ -272,22 +324,30 @@ button:focus-visible {
   border-radius: 0.5rem;
 }
 
-/* Mejorar visualización del gradiente en navegadores antiguos */
 @supports not (background-clip: text) {
   .bg-clip-text {
     color: #DC2626;
   }
 }
 
-/* Transición suave para routerLinkActive */
-[routerLinkActive] {
-  transition: all 0.2s ease-in-out;
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+  .japanese-text {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .japanese-text {
+    font-size: 1.5rem;
+  }
 }
 
 /* ========================================
-   MODO OSCURO (OPCIONAL)
+   MODO OSCURO
    ======================================== */
-
 @media (prefers-color-scheme: dark) {
   .navbar {
     background-color: rgba(17, 24, 39, 0.95);
@@ -304,17 +364,15 @@ button:focus-visible {
     background-color: rgba(239, 68, 68, 0.1);
   }
   
-  .japanese-text {
-    text-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
+  nav.navbar .user-dropdown {
+    background-color: #1F2937;
+    border-color: #374151;
   }
 }
 
 /* ========================================
-   REDUCIR ANIMACIONES (ACCESIBILIDAD)
-   NOTA: En producción, considera usar !important aquí
-   para garantizar que se respete la preferencia del usuario
+   REDUCIR ANIMACIONES
    ======================================== */
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -330,36 +388,8 @@ button:focus-visible {
 }
 
 /* ========================================
-   RESPONSIVE ADJUSTMENTS
+   OPTIMIZACIÓN TÁCTIL
    ======================================== */
-
-@media (max-width: 768px) {
-  .japanese-text {
-    font-size: 1.75rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .japanese-text {
-    font-size: 1.5rem;
-  }
-}
-
-/* ========================================
-   MEJORAS DE RENDIMIENTO
-   ======================================== */
-
-.navbar {
-  will-change: transform, background-color;
-  contain: layout style paint;
-}
-
-.nav-link,
-.btn-login {
-  will-change: transform;
-}
-
-/* Optimización para dispositivos táctiles */
 @media (hover: none) and (pointer: coarse) {
   .nav-link:hover .nav-underline,
   .logo-link:hover::after {

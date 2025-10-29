@@ -12,6 +12,16 @@ import {
 import { LoginCredenciales } from '../models/login.request.model';
 import { RegistroCredenciales } from '../models/register-request-model';
 
+import {
+  RespuestaVerificacion,
+  RespuestaReenvio,
+  RespuestaSolicitudReset,
+  RespuestaVerificacionToken,
+  RespuestaResetPassword,
+  SolicitudResetPassword,
+  DatosResetPassword,
+} from '../models/email.model';
+
 
 @Injectable({
   providedIn: 'root',
@@ -60,6 +70,7 @@ export class AuthService {
         tap((respuesta) => {
           if (respuesta.token && respuesta.usuario) {
             this.guardarSesion(respuesta.token, respuesta.usuario);
+
             this.usuarioActual.next(respuesta.usuario);
           }
         }),
@@ -80,6 +91,7 @@ export class AuthService {
         tap((respuesta) => {
           if (respuesta.token && respuesta.usuario) {
             this.guardarSesion(respuesta.token, respuesta.usuario);
+
             this.usuarioActual.next(respuesta.usuario);
           }
         }),
@@ -91,12 +103,144 @@ export class AuthService {
         tap(() => this.cargando.next(false))
       );
   }
+  /**
+   * Verifica el email del usuario mediante token
+   * @param token Token de verificación enviado por email
+   */
+  verificarEmail(token: string): Observable<RespuestaVerificacion> {
+    this.cargando.next(true);
+    return this.http
+      .get<RespuestaVerificacion>(
+        `${this.API_URL}/auth/verificar-email/${token}`
+      )
+      .pipe(
+        tap((respuesta) => {
+          if (respuesta.success) {
+            console.log('✅ Email verificado correctamente');
+          }
+        }),
+        catchError((error) => {
+          this.cargando.next(false);
+          console.error('❌ Error al verificar email:', error);
+          return throwError(() => error);
+        }),
+        tap(() => this.cargando.next(false))
+      );
+  }
+
+  /**
+   * Reenvía el email de verificación
+   * @param email Email del usuario
+   */
+  reenviarVerificacion(email: string): Observable<RespuestaReenvio> {
+    this.cargando.next(true);
+    return this.http
+      .post<RespuestaReenvio>(`${this.API_URL}/auth/reenviar-verificacion`, {
+        email,
+      })
+      .pipe(
+        tap((respuesta) => {
+          if (respuesta.success) {
+            console.log('✅ Email de verificación reenviado');
+          }
+        }),
+        catchError((error) => {
+          this.cargando.next(false);
+          console.error('❌ Error al reenviar verificación:', error);
+          return throwError(() => error);
+        }),
+        tap(() => this.cargando.next(false))
+      );
+  }
+
+  /**
+   * Solicita reset de contraseña
+   * @param datos Objeto con el email del usuario
+   */
+  solicitarResetPassword(
+    datos: SolicitudResetPassword
+  ): Observable<RespuestaSolicitudReset> {
+    this.cargando.next(true);
+    return this.http
+      .post<RespuestaSolicitudReset>(
+        `${this.API_URL}/auth/solicitar-reset-password`,
+        datos
+      )
+      .pipe(
+        tap((respuesta) => {
+          if (respuesta.success) {
+            console.log('✅ Email de recuperación enviado');
+          }
+        }),
+        catchError((error) => {
+          this.cargando.next(false);
+          console.error('❌ Error al solicitar reset:', error);
+          return throwError(() => error);
+        }),
+        tap(() => this.cargando.next(false))
+      );
+  }
+
+  /**
+   * Verifica si el token de reset es válido
+   * @param token Token de reset de contraseña
+   */
+  verificarTokenReset(token: string): Observable<RespuestaVerificacionToken> {
+    this.cargando.next(true);
+    return this.http
+      .get<RespuestaVerificacionToken>(
+        `${this.API_URL}/auth/verificar-token-reset/${token}`
+      )
+      .pipe(
+        tap((respuesta) => {
+          if (respuesta.success) {
+            console.log('✅ Token de reset válido');
+          }
+        }),
+        catchError((error) => {
+          this.cargando.next(false);
+          console.error('❌ Token inválido o expirado:', error);
+          return throwError(() => error);
+        }),
+        tap(() => this.cargando.next(false))
+      );
+  }
+
+  /**
+   * Resetea la contraseña del usuario
+   * @param token Token de reset
+   * @param datos Objeto con la nueva contraseña
+   */
+  resetPassword(
+    token: string,
+    datos: DatosResetPassword
+  ): Observable<RespuestaResetPassword> {
+    this.cargando.next(true);
+    return this.http
+      .post<RespuestaResetPassword>(
+        `${this.API_URL}/auth/reset-password/${token}`,
+        datos
+      )
+      .pipe(
+        tap((respuesta) => {
+          if (respuesta.success) {
+            console.log('✅ Contraseña actualizada correctamente');
+          }
+        }),
+        catchError((error) => {
+          this.cargando.next(false);
+          console.error('❌ Error al resetear contraseña:', error);
+          return throwError(() => error);
+        }),
+        tap(() => this.cargando.next(false))
+      );
+  }
 
   cerrarSesion(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
     this.usuarioActual.next(null);
-    this.router.navigate(['/auth']);
+    this.router.navigate(['/inicio']);
   }
 
   obtenerPerfil(): Observable<PerfilResponse> {
@@ -143,11 +287,9 @@ export class AuthService {
   }): Observable<CrearAdminResponse> {
     const headers = this.obtenerHeaders();
     return this.http
-      .post<CrearAdminResponse>(
-        `${this.API_URL}/admin/users`,
-        datos,
-        { headers }
-      )
+      .post<CrearAdminResponse>(`${this.API_URL}/admin/users`, datos, {
+        headers,
+      })
       .pipe(
         catchError((error) => {
           console.error('Error al crear usuario administrador:', error);
@@ -157,10 +299,12 @@ export class AuthService {
   }
 
   // ✅ Nuevo método: obtener lista de usuarios (solo webmaster)
-  obtenerUsuarios(): Observable<{ usuarios:UsuarioLista[] }> {
+  obtenerUsuarios(): Observable<{ usuarios: UsuarioLista[] }> {
     const headers = this.obtenerHeaders();
     return this.http
-      .get<{ usuarios: UsuarioLista[] }>(`${this.API_URL}/admin/users`, { headers })
+      .get<{ usuarios: UsuarioLista[] }>(`${this.API_URL}/admin/users`, {
+        headers,
+      })
       .pipe(
         catchError((error) => {
           console.error('Error al obtener lista de usuarios:', error);

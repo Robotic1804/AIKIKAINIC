@@ -6,7 +6,9 @@
   position: relative;
   height: 100vh;
   width: 100%;
-  overflow: hidden;
+  overflow:visible;
+  isolation: isolate;
+  z-index: 1;
 }
 
 /* ========================================
@@ -17,6 +19,7 @@
   position: absolute;
   inset: 0;
   z-index: 1;
+  overflow: hidden;
 }
 
 .hero-image {
@@ -86,13 +89,14 @@
 
 
 
+
 /* ========================================
    CONTENIDO HERO
    ======================================== */
 
 .hero-content {
   position: relative;
-  z-index: 100;
+  z-index: 10;
   height: 100%;
   display: flex;
   align-items: center;
@@ -105,11 +109,11 @@
 
 .japanese-decoration {
   position: absolute;
-  right: 8%;  /* ← Más hacia adentro */
-  top: 45%;   /* ← Ajustar posición vertical */
+  right: 8%;
+  top: 45%;
   transform: translateY(-50%);
-  z-index: 150;  /* ← Por encima de todo */
-  opacity: 0.6;  /* ← Más visible pero sigue siendo elegante */
+  z-index: 15;
+  opacity: 0.6;
   pointer-events: none;
   user-select: none;
 }
@@ -118,28 +122,29 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.5rem;  /* ← Pequeño espacio entre caracteres */
+  gap: 0.5rem;
 }
 
 .vertical-text {
   writing-mode: vertical-rl;
   text-orientation: upright;
-  display:inline-block ;
+  display: inline-block;
 }
 
 .kanji-large {
-  font-size: clamp(5rem, 12vw, 10rem);  /* ← Más grande */
+  font-size: clamp(5rem, 12vw, 10rem);
   font-weight: 900;
-  color: white;  /* ← Volver a blanco */
+  color: white;
   letter-spacing: 0;
   text-shadow: 
     0 6px 24px rgba(255, 255, 255, 0.4),
     0 0 50px rgba(239, 68, 68, 0.3),
-    0 2px 8px rgba(0, 0, 0, 0.8);  /* ← Sombra negra para contraste */
+    0 2px 8px rgba(0, 0, 0, 0.8);
   font-family: "Noto Serif JP", "Yu Mincho", "MS Mincho", serif;
-  line-height: 1.2;  /* ← Un poco más de espacio */
+  line-height: 1.2;
   display: block;
 }
+
 .kanji-large:nth-child(1) {
   animation-delay: 0.5s;
 }
