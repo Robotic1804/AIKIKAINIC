@@ -1,4 +1,4 @@
-// src/app/core/services/auth.service.ts
+// src/app/features/auth/services/auth.service.ts
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError, of } from 'rxjs';
@@ -7,11 +7,9 @@ import { Router } from '@angular/router';
 import { Usuario, UserRole, PerfilResponse, UsuarioLista, CrearAdminResponse } from '../models/user.model';
 import {
   RespuestaAuth,
-  RefreshTokenResponse,
 } from '../models/auth.response.model';
 import { LoginCredenciales } from '../models/login.request.model';
 import { RegistroCredenciales } from '../models/register-request-model';
-
 import {
   RespuestaVerificacion,
   RespuestaReenvio,
@@ -20,23 +18,25 @@ import {
   RespuestaResetPassword,
   SolicitudResetPassword,
   DatosResetPassword,
+  VerificacionConLoginResponse
 } from '../models/email.model';
-
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly API_URL = 'http://localhost:3000/api';
+  private readonly API_URL = `${environment.apiUrl}/auth`;
+  private readonly ADMIN_URL = `${environment.apiUrl}/admin`;
   private readonly TOKEN_KEY = 'auth_token';
   private readonly USER_KEY = 'user_data';
+  private readonly REFRESH_TOKEN_KEY = 'refresh_token';
 
   private usuarioActual = new BehaviorSubject<Usuario | null>(null);
   public usuarioActual$ = this.usuarioActual.asObservable();
 
   private cargando = new BehaviorSubject<boolean>(false);
   public cargando$ = this.cargando.asObservable();
-
   private http = inject(HttpClient);
   private router = inject(Router);
 
@@ -70,13 +70,11 @@ export class AuthService {
         tap((respuesta) => {
           if (respuesta.token && respuesta.usuario) {
             this.guardarSesion(respuesta.token, respuesta.usuario);
-
             this.usuarioActual.next(respuesta.usuario);
           }
         }),
         catchError((error) => {
           this.cargando.next(false);
-          console.error('Error en registro:', error);
           return throwError(() => error);
         }),
         tap(() => this.cargando.next(false))
@@ -91,37 +89,42 @@ export class AuthService {
         tap((respuesta) => {
           if (respuesta.token && respuesta.usuario) {
             this.guardarSesion(respuesta.token, respuesta.usuario);
-
+            if (respuesta.refreshToken) {
+              this.guardarRefreshToken(respuesta.refreshToken);
+            }
             this.usuarioActual.next(respuesta.usuario);
           }
         }),
         catchError((error) => {
           this.cargando.next(false);
-          console.error('Error en login:', error);
           return throwError(() => error);
         }),
         tap(() => this.cargando.next(false))
       );
   }
+
   /**
    * Verifica el email del usuario mediante token
    * @param token Token de verificación enviado por email
    */
-  verificarEmail(token: string): Observable<RespuestaVerificacion> {
+  verificarEmail(token: string): Observable<VerificacionConLoginResponse> {
     this.cargando.next(true);
     return this.http
-      .get<RespuestaVerificacion>(
-        `${this.API_URL}/auth/verificar-email/${token}`
+      .get<VerificacionConLoginResponse>(
+        `${this.API_URL}/verificar-email/${token}`
       )
       .pipe(
         tap((respuesta) => {
-          if (respuesta.success) {
-            console.log('✅ Email verificado correctamente');
+          if (respuesta.token && respuesta.usuario) {
+            this.guardarSesion(respuesta.token, respuesta.usuario);
+            if (respuesta.refreshToken) {
+              this.guardarRefreshToken(respuesta.refreshToken);
+            }
+            this.usuarioActual.next(respuesta.usuario);
           }
         }),
         catchError((error) => {
           this.cargando.next(false);
-          console.error('❌ Error al verificar email:', error);
           return throwError(() => error);
         }),
         tap(() => this.cargando.next(false))
@@ -135,18 +138,12 @@ export class AuthService {
   reenviarVerificacion(email: string): Observable<RespuestaReenvio> {
     this.cargando.next(true);
     return this.http
-      .post<RespuestaReenvio>(`${this.API_URL}/auth/reenviar-verificacion`, {
+      .post<RespuestaReenvio>(`${this.API_URL}/reenviar-verificacion`, {
         email,
       })
       .pipe(
-        tap((respuesta) => {
-          if (respuesta.success) {
-            console.log('✅ Email de verificación reenviado');
-          }
-        }),
         catchError((error) => {
           this.cargando.next(false);
-          console.error('❌ Error al reenviar verificación:', error);
           return throwError(() => error);
         }),
         tap(() => this.cargando.next(false))
@@ -154,7 +151,7 @@ export class AuthService {
   }
 
   /**
-   * Solicita reset de contraseña
+   * Solicita el reset de contraseña
    * @param datos Objeto con el email del usuario
    */
   solicitarResetPassword(
@@ -163,18 +160,12 @@ export class AuthService {
     this.cargando.next(true);
     return this.http
       .post<RespuestaSolicitudReset>(
-        `${this.API_URL}/auth/solicitar-reset-password`,
+        `${this.API_URL}/solicitar-reset-password`,
         datos
       )
       .pipe(
-        tap((respuesta) => {
-          if (respuesta.success) {
-            console.log('✅ Email de recuperación enviado');
-          }
-        }),
         catchError((error) => {
           this.cargando.next(false);
-          console.error('❌ Error al solicitar reset:', error);
           return throwError(() => error);
         }),
         tap(() => this.cargando.next(false))
@@ -189,17 +180,11 @@ export class AuthService {
     this.cargando.next(true);
     return this.http
       .get<RespuestaVerificacionToken>(
-        `${this.API_URL}/auth/verificar-token-reset/${token}`
+        `${this.API_URL}/verificar-token-reset/${token}`
       )
       .pipe(
-        tap((respuesta) => {
-          if (respuesta.success) {
-            console.log('✅ Token de reset válido');
-          }
-        }),
         catchError((error) => {
           this.cargando.next(false);
-          console.error('❌ Token inválido o expirado:', error);
           return throwError(() => error);
         }),
         tap(() => this.cargando.next(false))
@@ -218,18 +203,12 @@ export class AuthService {
     this.cargando.next(true);
     return this.http
       .post<RespuestaResetPassword>(
-        `${this.API_URL}/auth/reset-password/${token}`,
+        `${this.API_URL}/reset-password/${token}`,
         datos
       )
       .pipe(
-        tap((respuesta) => {
-          if (respuesta.success) {
-            console.log('✅ Contraseña actualizada correctamente');
-          }
-        }),
         catchError((error) => {
           this.cargando.next(false);
-          console.error('❌ Error al resetear contraseña:', error);
           return throwError(() => error);
         }),
         tap(() => this.cargando.next(false))
@@ -239,6 +218,7 @@ export class AuthService {
   cerrarSesion(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
+    localStorage.removeItem(this.REFRESH_TOKEN_KEY);
     this.usuarioActual.next(null);
     this.router.navigate(['/inicio']);
   }
@@ -254,7 +234,7 @@ export class AuthService {
 
           const usuarioActualizado: Usuario = {
             id: perfil._id,
-            nombre: perfil.nombre,
+            name: perfil.name,
             email: perfil.email,
             role: perfil.role,
             token: usuarioActual.token,
@@ -272,42 +252,38 @@ export class AuthService {
 
   verificarToken(token: string): Observable<boolean> {
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.get(`${this.API_URL}/auth/perfil`, { headers }).pipe(
+    return this.http.get(`${this.API_URL}/perfil`, { headers }).pipe(
       map(() => true),
       catchError(() => of(false))
     );
   }
 
-  // ✅ Nuevo método: crear usuario admin/webmaster
   crearUsuarioAdmin(datos: {
-    nombre: string;
+    name: string;
     email: string;
     password: string;
     role: UserRole;
   }): Observable<CrearAdminResponse> {
     const headers = this.obtenerHeaders();
     return this.http
-      .post<CrearAdminResponse>(`${this.API_URL}/admin/users`, datos, {
+      .post<CrearAdminResponse>(`${this.ADMIN_URL}/users`, datos, {
         headers,
       })
       .pipe(
         catchError((error) => {
-          console.error('Error al crear usuario administrador:', error);
           return throwError(() => error);
         })
       );
   }
 
-  // ✅ Nuevo método: obtener lista de usuarios (solo webmaster)
   obtenerUsuarios(): Observable<{ usuarios: UsuarioLista[] }> {
     const headers = this.obtenerHeaders();
     return this.http
-      .get<{ usuarios: UsuarioLista[] }>(`${this.API_URL}/admin/users`, {
+      .get<{ usuarios: UsuarioLista[] }>(`${this.ADMIN_URL}/users`, {
         headers,
       })
       .pipe(
         catchError((error) => {
-          console.error('Error al obtener lista de usuarios:', error);
           return throwError(() => error);
         })
       );
@@ -317,13 +293,11 @@ export class AuthService {
     return !!this.obtenerToken() && !!this.usuarioActual.value;
   }
 
-  // ✅ Actualizado: usa role en lugar de rol
   esAdmin(): boolean {
     const role = this.usuarioActual.value?.role;
     return role === 'admin' || role === 'webmaster';
   }
 
-  // ✅ Nuevo método: verifica si es webmaster
   esWebmaster(): boolean {
     return this.usuarioActual.value?.role === 'webmaster';
   }
@@ -339,6 +313,24 @@ export class AuthService {
 
   private guardarDatosUsuario(usuario: Usuario): void {
     localStorage.setItem(this.USER_KEY, JSON.stringify(usuario));
+  }
+
+  /**
+   * Public method to handle email verification with auto-login
+   * @param token - The authentication token from email verification
+   * @param usuario - The user data to store
+   */
+  guardarSesionDesdeVerificacion(token: string, usuario: Usuario): void {
+    this.guardarSesion(token, usuario);
+    this.usuarioActual.next(usuario);
+  }
+
+  /**
+   * Updates the authentication token after refresh
+   * @param token - The new authentication token
+   */
+  actualizarToken(token: string): void {
+    localStorage.setItem(this.TOKEN_KEY, token);
   }
 
   obtenerToken(): string | null {
@@ -360,7 +352,7 @@ export class AuthService {
         return parsed as Usuario;
       }
     } catch (e) {
-      console.warn('Error al parsear datos de usuario', e);
+      return null;
     }
     return null;
   }
@@ -373,24 +365,28 @@ export class AuthService {
     });
   }
 
-  refrescarToken(): Observable<RefreshTokenResponse> {
-    const headers = this.obtenerHeaders();
+  refrescarToken(): Observable<{ token: string }> {
+    const refreshToken = localStorage.getItem(this.REFRESH_TOKEN_KEY);
+
+    if (!refreshToken) {
+      this.cerrarSesion();
+      return throwError(() => new Error('No refresh token'));
+    }
+
     return this.http
-      .post<RefreshTokenResponse>(
-        `${this.API_URL}/refresh-token`,
-        {},
-        { headers }
-      )
+      .post<{ token: string }>(`${this.API_URL}/auth/refresh-token`, {
+        refreshToken,
+      })
       .pipe(
         tap((respuesta) => {
           if (respuesta.token) {
             localStorage.setItem(this.TOKEN_KEY, respuesta.token);
           }
-        }),
-        catchError((error) => {
-          this.cerrarSesion();
-          return throwError(() => error);
         })
       );
+  }
+
+  private guardarRefreshToken(refreshToken: string): void {
+    localStorage.setItem(this.REFRESH_TOKEN_KEY, refreshToken);
   }
 }

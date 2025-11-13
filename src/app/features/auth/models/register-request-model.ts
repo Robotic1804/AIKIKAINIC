@@ -1,5 +1,5 @@
 export interface RegistroCredenciales {
-  nombre: string;
+  name: string;
   email: string;
   password: string;
 }

@@ -1,13 +1,5 @@
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* Note: fade-in-up animation and animate-fade-in-up class moved to global styles.css */
+/* Note: delay-100 and delay-200 classes moved to global styles.css */
 
 @keyframes spin-slow {
   from {
@@ -18,18 +10,6 @@
   }
 }
 
-.animate-fade-in-up {
-  animation: fade-in-up 0.8s ease-out forwards;
-}
-
 .animate-spin-slow {
   animation: spin-slow 4s linear infinite;
-}
-
-.delay-100 {
-  animation-delay: 0.1s;
-}
-
-.delay-200 {
-  animation-delay: 0.2s;
 }

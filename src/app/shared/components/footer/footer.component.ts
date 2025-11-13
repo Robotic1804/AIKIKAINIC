@@ -69,7 +69,6 @@ export class FooterComponent {
   subscribeNewsletter() {
     if (this.email()) {
       // Aquí iría la lógica de suscripción
-      console.log('Suscrito:', this.email());
       this.subscribed.set(true);
       setTimeout(() => {
         this.subscribed.set(false);

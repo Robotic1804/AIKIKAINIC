@@ -49,7 +49,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((usuario) => {
         this.estaAutenticado.set(!!usuario);
-        this.usuarioNombre.set(usuario?.nombre || '');
+        this.usuarioNombre.set(usuario?.name || '');
       });
 
     this.router.events
@@ -75,10 +75,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     if (event) {
       event.stopPropagation()
       event.preventDefault();
-
     }
     this.userMenuOpen.update((open) => !open);
-    console.log('User menu toggled:', this.userMenuOpen());
   }
 
   cerrarSesion(): void {

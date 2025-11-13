@@ -2,7 +2,7 @@
 export type OpcionAuth = 'registro' | 'login' | null;
 
 export interface DatosRegistro {
-  nombre: string;
+  name: string;
   email: string;
   password: string;
 }
@@ -20,8 +20,8 @@ export interface ErrorResponse {
   message?: string;
 }
 export interface RegistroFormValues {
-  nombre: string;
+  name: string;
   email: string;
   password: string;
-  confirmarPassword: string;
+  confirmPassword: string;
 }

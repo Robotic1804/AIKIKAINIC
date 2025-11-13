@@ -1,3 +1,5 @@
+import { Usuario } from "./user.model";
+
 export type UserRole = 'user' | 'admin' | 'webmaster';
 
 
@@ -59,4 +61,11 @@ export interface SolicitudResetPassword {
  */
 export interface DatosResetPassword {
   password: string;
+}
+
+export interface VerificacionConLoginResponse {
+  mensaje: string; // El mensaje del backend
+  token: string; // El JWT
+  refreshToken?: string; // Opcional
+  usuario: Usuario; // El objeto Usuario (con id, name, email, role, etc.)
 }

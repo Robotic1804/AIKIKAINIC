@@ -1,0 +1,28 @@
+/* Animaciones suaves */
+.event-card {
+transition: all 0.3s ease;
+}
+.event-card:hover {
+transform: translateY(-2px);
+}
+/* Scrollbar personalizado para modales */
+.modal-content::-webkit-scrollbar {
+width: 8px;
+}
+.modal-content::-webkit-scrollbar-track {
+background: #f1f1f1;
+}
+.modal-content::-webkit-scrollbar-thumb {
+background: #888;
+border-radius: 4px;
+}
+.modal-content::-webkit-scrollbar-thumb:hover {
+background: #555;
+}
+/* Responsive fixes adicionales */
+@media (max-width: 640px) {
+.modal-content {
+max-height: 85vh;
+overflow-y: auto;
+}
+}

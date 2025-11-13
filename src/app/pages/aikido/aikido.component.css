@@ -1,48 +1,15 @@
-/* aikido.component.css */
+/* ============================================
+   AIKIDO COMPONENT - ESTILOS ESPECÍFICOS
+   Note: Scroll behavior, scroll-margin, focus-visible, and reduced motion are now in global styles.css
+   Este archivo contiene SOLO estilos específicos del componente aikido
+============================================ */
 
-html {
-  scroll-behavior: smooth;
-}
-
+/* Japanese font for kanji characters */
 .japanese-text {
   font-family: 'Noto Serif JP', 'Yu Gothic', 'Yu Mincho', serif;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* Component section animation */
 section {
-  animation: fadeInUp 0.6s ease-out;
-}
-
-section[id] {
-  scroll-margin-top: 100px;
-}
-
-a:focus-visible,
-button:focus-visible {
-  outline: 2px solid #DC2626;
-  outline-offset: 4px;
-  border-radius: 0.5rem;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms;
-    transition-duration: 0.01ms;
-  }
-  
-  html {
-    scroll-behavior: auto;
-  }
+  animation: fade-in-up 0.6s ease-out;
 }

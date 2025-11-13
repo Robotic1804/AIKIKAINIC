@@ -14,10 +14,30 @@ export const routes: Routes = [
     title: 'Inicio',
   },
 
-  // ==========================================
-  // AUTENTICACIÓN
-  // ==========================================
-
+  {
+    path: 'reset-password',
+    loadComponent: () =>
+      import(
+        './app/features/auth/reset-password/reset-password.component'
+      ).then((m) => m.ResetPasswordComponent),
+    title: 'Restablecer Contraseña',
+  },
+  {
+    path: 'auth/cambiar-password-obligatorio',
+    loadComponent: () =>
+      import(
+        './app/features/auth/reset-password/reset-password.component'
+      ).then((m) => m.ResetPasswordComponent),
+    title: 'Cambiar Contraseña Obligatorio',
+  },
+  {
+    path: 'email-verificado',
+    loadComponent: () =>
+      import(
+        './app/features/auth/email-verificado/email-verificado.component'
+      ).then((m) => m.EmailVerificadoComponent),
+    title: 'Email Verificado',
+  },
 
   // ==========================================
   // INFORMACIÓN DE AIKIDO
@@ -31,7 +51,7 @@ export const routes: Routes = [
     title: 'Aikido',
   },
   {
-    path: 'aikido-historia',
+    path: 'aikido-historia', // Corregí el nombre para que coincida con la redirección
     loadComponent: () =>
       import('./app/pages/aikidohistory/aikidohistory.component').then(
         (m) => m.AikidohistoryComponent
@@ -68,6 +88,7 @@ export const routes: Routes = [
       import('./app/pages/galeria/galeria.component').then(
         (m) => m.GaleriaComponent
       ),
+    canActivate: [authGuard],
     title: 'Galería',
   },
   {
@@ -79,26 +100,9 @@ export const routes: Routes = [
     title: 'Aiki Face',
   },
 
-  {
-    path: 'admin/dashboard',
-    loadComponent: () =>
-      import('./app/admin/admin-dashboard/admin-dashboard.component').then(
-        (m) => m.AdminDashboardComponent
-      ),
-    canActivate: [adminGuard],
-  },
-
   // ==========================================
   // ÁREA DE USUARIOS (Protegida)
   // ==========================================
-  {
-    path: 'webmaster/admins',
-    loadComponent: () =>
-      import('./app/webmaster/gestion-admins/gestion-admins.component').then(
-        (m) => m.GestionAdminsComponent
-      ),
-    canActivate: [webmasterGuard],
-  },
   {
     path: 'dashboard',
     loadComponent: () =>
@@ -113,6 +117,14 @@ export const routes: Routes = [
   // ÁREA DE ADMINISTRACIÓN (Protegida)
   // ==========================================
   {
+    path: 'admin/dashboard',
+    loadComponent: () =>
+      import('./app/admin/admin-dashboard/admin-dashboard.component').then(
+        (m) => m.AdminDashboardComponent
+      ),
+    canActivate: [adminGuard],
+  },
+  {
     path: 'admin',
     canActivate: [adminGuard],
     children: [
@@ -122,6 +134,18 @@ export const routes: Routes = [
         pathMatch: 'full',
       },
     ],
+  },
+
+  // ==========================================
+  // ÁREA DE WEBMASTER (Protegida)
+  // ==========================================
+  {
+    path: 'webmaster/admins',
+    loadComponent: () =>
+      import('./app/webmaster/gestion-admins/gestion-admins.component').then(
+        (m) => m.GestionAdminsComponent
+      ),
+    canActivate: [webmasterGuard],
   },
 
   // ==========================================

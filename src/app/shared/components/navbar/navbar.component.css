@@ -1,6 +1,9 @@
-/* ========================================
-   ESTILOS NAVBAR - AIKIDO (OPTIMIZADO)
-   ======================================== */
+/* ============================================
+   NAVBAR COMPONENT - ESTILOS ESPECÍFICOS
+   Note: Animations (slideDown, fadeInUp), scroll-behavior, focus-visible,
+         reduced-motion, and body.menu-open are now in global styles.css
+   Este archivo contiene SOLO estilos específicos del componente navbar
+============================================ */
 
 /* ========================================
    JERARQUÍA DE Z-INDEX (DOCUMENTADA)
@@ -15,7 +18,7 @@
 */
 
 /* ========================================
-   BASE Y RESET
+   BASE Y RESET (COMPONENTE ESPECÍFICO)
    ======================================== */
 body {
   padding-top: 0;
@@ -118,7 +121,7 @@ a.nav-link.nav-active .nav-underline {
 }
 
 /* ========================================
-   USER DROPDOWN MENU - SIN !IMPORTANT
+   USER DROPDOWN MENU
    ======================================== */
 
 /* Contenedor del botón de usuario */
@@ -136,8 +139,8 @@ nav.navbar .user-dropdown {
   min-width: 14rem;
   background-color: white;
   border-radius: 0.75rem;
-  box-shadow: 
-    0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04),
     0 0 0 1px rgba(0, 0, 0, 0.05);
   padding: 0.5rem 0;
@@ -269,31 +272,6 @@ a.mobile-nav-link.mobile-nav-active {
   font-weight: 600;
 }
 
-/* ========================================
-   ANIMACIONES
-   ======================================== */
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* Animación escalonada para menú móvil */
 .mobile-menu > div > a:nth-child(1) { animation: fadeInUp 0.3s ease-out 0.05s both; }
 .mobile-menu > div > a:nth-child(2) { animation: fadeInUp 0.3s ease-out 0.1s both; }
@@ -303,27 +281,8 @@ a.mobile-nav-link.mobile-nav-active {
 .mobile-menu > div > a:nth-child(6) { animation: fadeInUp 0.3s ease-out 0.3s both; }
 
 /* ========================================
-   SCROLL Y BODY LOCK
+   FALLBACK PARA BACKGROUND-CLIP
    ======================================== */
-html {
-  scroll-behavior: smooth;
-}
-
-body.menu-open {
-  overflow: hidden;
-  height: 100vh;
-}
-
-/* ========================================
-   ACCESIBILIDAD
-   ======================================== */
-a:focus-visible,
-button:focus-visible {
-  outline: 2px solid #DC2626;
-  outline-offset: 4px;
-  border-radius: 0.5rem;
-}
-
 @supports not (background-clip: text) {
   .bg-clip-text {
     color: #DC2626;
@@ -352,38 +311,21 @@ button:focus-visible {
   .navbar {
     background-color: rgba(17, 24, 39, 0.95);
   }
-  
+
   .nav-link,
   .mobile-nav-link {
     color: #F3F4F6;
   }
-  
+
   .nav-link:hover,
   .mobile-nav-link:hover {
     color: #EF4444;
     background-color: rgba(239, 68, 68, 0.1);
   }
-  
+
   nav.navbar .user-dropdown {
     background-color: #1F2937;
     border-color: #374151;
-  }
-}
-
-/* ========================================
-   REDUCIR ANIMACIONES
-   ======================================== */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms;
-    animation-iteration-count: 1;
-    transition-duration: 0.01ms;
-  }
-  
-  html {
-    scroll-behavior: auto;
   }
 }
 
@@ -395,7 +337,7 @@ button:focus-visible {
   .logo-link:hover::after {
     width: 0;
   }
-  
+
   .nav-link:active {
     background-color: #FEF2F2;
   }

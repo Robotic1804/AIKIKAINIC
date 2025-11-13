@@ -5,6 +5,7 @@ export interface RespuestaAuth {
   token: string;
   usuario?: Usuario;
   admin?: Usuario;
+  refreshToken?: string;
 }
 
 export interface CrearAdminResponse {

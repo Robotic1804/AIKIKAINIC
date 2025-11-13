@@ -1,84 +1,64 @@
-import {
-  HttpInterceptor,
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpErrorResponse,
-} from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable, throwError } from 'rxjs';
+// src/app/features/auth/interceptors/auth.interceptor.ts
+import { inject } from '@angular/core';
+import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
+import { throwError} from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  private isRefreshing = false;
-  private authService = inject(AuthService);
-  private router = inject(Router);
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
 
-  intercept(
-    req: HttpRequest<unknown>,
-    next: HttpHandler
-  ): Observable<HttpEvent<unknown>> {
-    // Obtener el token
-    const token = this.authService.obtenerToken();
+  // Clona la solicitud original
+  let authReq = req;
 
-    // Si hay token, agregarlo a los headers
-    let authReq = req;
-    if (token) {
-      authReq = req.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-    }
-
-    // Manejar la respuesta
-    return next.handle(authReq).pipe(
-      catchError((error: HttpErrorResponse) => {
-        // Si es error 401 (no autorizado)
-        if (error.status === 401) {
-          // Si no estamos refrescando el token
-          if (!this.isRefreshing) {
-            this.isRefreshing = true;
-
-            // Intentar refrescar el token
-            return this.authService.refrescarToken().pipe(
-              switchMap(() => {
-                this.isRefreshing = false;
-
-                // Reintentar la petición original con el nuevo token
-                const newToken = this.authService.obtenerToken();
-                if (newToken) {
-                  const retryReq = req.clone({
-                    setHeaders: {
-                      Authorization: `Bearer ${newToken}`,
-                    },
-                  });
-                  return next.handle(retryReq);
-                }
-
-                return throwError(() => error);
-              }),
-              catchError((refreshError) => {
-                this.isRefreshing = false;
-                // Si falla el refresh, cerrar sesión
-                this.authService.cerrarSesion();
-                return throwError(() => refreshError);
-              })
-            );
-          }
-        }
-
-        // Si es error 403 (prohibido)
-        if (error.status === 403) {
-          // Manejar acceso denegado
-          console.error('Acceso denegado:', error);
-        }
-
-        return throwError(() => error);
-      })
-    );
+  // Obtiene el token
+  const token = authService.obtenerToken();
+  if (token) {
+    authReq = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
-}
+
+  // Envía la solicitud
+  return next(authReq).pipe(
+    catchError((error: HttpErrorResponse) => {
+      // Si el token expiró (401), intenta refrescarlo
+      if (error.status === 401 && !req.url.includes('/auth/refresh-token')) {
+        return authService.refrescarToken().pipe(
+          switchMap((refreshResponse: { token: string }) => {
+            if (refreshResponse?.token) {
+              // Use AuthService method instead of direct localStorage access
+              authService.actualizarToken(refreshResponse.token);
+
+              // Reintenta la solicitud original con el nuevo token
+              const newReq = req.clone({
+                setHeaders: {
+                  Authorization: `Bearer ${refreshResponse.token}`,
+                },
+              });
+              return next(newReq);
+            }
+
+            // Si no se pudo refrescar, cierra sesión
+            authService.cerrarSesion();
+            router.navigate(['/login']);
+            return throwError(() => error);
+          }),
+          catchError(() => {
+            // Si el refresh falla, cierra sesión
+            authService.cerrarSesion();
+            router.navigate(['/login']);
+            return throwError(() => error);
+          })
+        );
+      }
+
+      // Para otros errores (403, etc.), solo propaga el error
+      return throwError(() => error);
+    })
+  );
+};

@@ -258,7 +258,7 @@
   }
 }
 
-.btn-primary {
+.hero-btn-primary {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -281,7 +281,7 @@
   overflow: hidden;
 }
 
-.btn-primary::before {
+.hero-btn-primary::before {
   content: '';
   position: absolute;
   top: 0;
@@ -297,11 +297,11 @@
   transition: left 0.5s ease;
 }
 
-.btn-primary:hover::before {
+.hero-btn-primary:hover::before {
   left: 100%;
 }
 
-.btn-primary:hover {
+.hero-btn-primary:hover {
   background: linear-gradient(
     135deg,
     #B91C1C 0%,
@@ -313,19 +313,19 @@
   transform: translateY(-2px);
 }
 
-.btn-primary:active {
+.hero-btn-primary:active {
   transform: translateY(0);
 }
 
-.btn-primary svg {
+.hero-btn-primary svg {
   transition: transform 0.3s ease;
 }
 
-.btn-primary:hover svg {
+.hero-btn-primary:hover svg {
   transform: translateX(4px);
 }
 
-.btn-secondary {
+.hero-btn-secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -342,7 +342,7 @@
     0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.btn-secondary:hover {
+.hero-btn-secondary:hover {
   background: white;
   color: #DC2626;
   transform: translateY(-2px);
@@ -350,7 +350,7 @@
     0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-.btn-secondary:active {
+.hero-btn-secondary:active {
   transform: translateY(0);
 }
 
@@ -474,8 +474,8 @@
     gap: 0.875rem;
   }
 
-  .btn-primary,
-  .btn-secondary {
+  .hero-btn-primary,
+  .hero-btn-secondary {
     padding: 0.875rem 1.75rem;
     font-size: 0.9375rem;
     width: 100%;
@@ -520,8 +520,11 @@
 
 /* ========================================
    ANIMACIONES
+   Note: fadeInDown, slideUpFade, and pulseGlow are now global animations in styles.css
+   This file contains only hero-specific animations
    ======================================== */
-   /* Animación sutil para los kanji */
+
+/* Animación sutil para los kanji */
 @keyframes fadeInKanji {
   from {
     opacity: 0;
@@ -530,40 +533,6 @@
   to {
     opacity: 1;
     transform: translateX(0);
-  }
-}
-
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideUpFade {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes pulseGlow {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.6;
-    transform: scale(1.1);
   }
 }
 
