@@ -63,6 +63,14 @@ export class GaleriaComponent implements OnInit {
     this.isWebmaster = this.authService.esWebmaster();
   }
 
+  toggleForm(): void {
+    this.showForm = !this.showForm;
+    // Si estamos abriendo el formulario, resetear todos los campos
+    if (this.showForm) {
+      this.resetForm();
+    }
+  }
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ModalService } from '../../../services/modal.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -16,6 +17,7 @@ export class ResetPasswordComponent {
   private router = inject(Router);
   private authService = inject(AuthService);
   private fb = inject(FormBuilder);
+  private modalService = inject(ModalService);
 
   token = signal<string | null>(null);
   email = signal<string | null>(null); // ✅ NUEVO
@@ -80,7 +82,12 @@ export class ResetPasswordComponent {
       .subscribe({
         next: () => {
           this.exito.set('¡Contraseña actualizada! Redirigiendo al login...');
-          setTimeout(() => this.router.navigate(['/auth/login']), 2000);
+          setTimeout(() => {
+            this.router.navigate(['/inicio']).then(() => {
+              // Open login modal after navigating to home
+              setTimeout(() => this.modalService.abrirLoginModal(), 300);
+            });
+          }, 2000);
         },
         error: (err) => {
           this.error.set(

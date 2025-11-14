@@ -25,17 +25,15 @@ import { NotificationService } from 'src/app/services/notification.service';
 // Tipos
 type Modo = 'login' | 'register' | 'recuperar';
 
-// Interfaz actualizada para el registro
+// Interfaz actualizada para el registro (solo campos enviados al backend)
 interface DatosRegistro {
-  name: string; // Mapeado a 'name' en el backend si es necesario
+  name: string;
   email: string;
   password: string;
-  confirmarPassword: string;
-  edad?: number; // Opcional, puedes eliminarlo si se calcula desde la fecha de nacimiento
-  telefono?: string;
-  birthMonth: string; // Número del mes como string
-  birthDay: string; // Número del día como string
-  rank: string; // Valor del rango (e.g., '6kyu')
+  phone?: string;
+  birthMonth?: string;
+  birthDay?: string;
+  rank: string;
 }
 
 interface DatosLogin {
@@ -269,14 +267,20 @@ export class LoginModalComponent implements OnInit {
 
     try {
       // Preparar los datos para enviarlos al backend
-      // Asegúrate de que el AuthService espere estos campos
-      const datosRegistro: DatosRegistro = this.registerForm.getRawValue();
-      // Opcional: Convertir los campos de fecha a un formato específico si el backend lo requiere
-      // const fechaNacimiento = `${datosRegistro.birthYear}-${datosRegistro.birthMonth.padStart(2,'0')}-${datosRegistro.birthDay.padStart(2,'0')}`;
-      // const datosParaEnviar = { ...datosRegistro, fechaNacimiento };
+      const formData = this.registerForm.getRawValue();
 
-      // Asegúrate de que tu AuthService.registrar espere la estructura DatosRegistro
-      await firstValueFrom(this.authService.registrar(datosRegistro)); // Asegúrate que el servicio maneje los nuevos campos
+      // Filtrar solo los campos que el backend espera
+      const datosRegistro = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        phone: formData.phone,
+        birthMonth: formData.birthMonth,
+        birthDay: formData.birthDay,
+        rank: formData.rank
+      };
+
+      await firstValueFrom(this.authService.registrar(datosRegistro));
 
       this.mensajeExito.set(
         '¡Registro exitoso! Por favor verifica tu email para activar tu cuenta.'
