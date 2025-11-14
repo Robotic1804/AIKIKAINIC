@@ -6,3 +6,64 @@
   animation: fade-in 1s ease-out 0.3s forwards;
   opacity: 0;
 }
+
+/* Mobile responsive improvements */
+@media (max-width: 768px) {
+  /* Ensure video container maintains aspect ratio */
+  .aspect-video {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+  }
+
+  .aspect-video video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Change from cover to contain on mobile */
+    background-color: #000;
+  }
+
+  /* Adjust text sizes for mobile */
+  h3.text-3xl {
+    font-size: 1.5rem !important;
+    line-height: 1.3;
+  }
+
+  p.text-lg {
+    font-size: 1rem !important;
+    padding: 0 1rem;
+  }
+
+  /* Make play button more touch-friendly */
+  .w-20 {
+    width: 4.5rem !important;
+  }
+
+  .h-20 {
+    height: 4.5rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small screens */
+  h3.text-3xl {
+    font-size: 1.25rem !important;
+  }
+
+  p.text-lg {
+    font-size: 0.875rem !important;
+  }
+
+  /* Smaller play button for very small screens */
+  .w-20 {
+    width: 4rem !important;
+  }
+
+  .h-20 {
+    height: 4rem !important;
+  }
+}
