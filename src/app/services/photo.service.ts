@@ -18,7 +18,10 @@ export class PhotoService {
       map((photos) =>
         photos.map((photo) => ({
           ...photo,
-          imageUrl: `${this.baseUrl}${photo.imageUrl}`,
+          // Cloudinary returns full URLs, so no need to prepend baseUrl
+          imageUrl: photo.imageUrl.startsWith('http')
+            ? photo.imageUrl
+            : `${this.baseUrl}${photo.imageUrl}`, // Fallback for old local URLs
         }))
       ),
       catchError(this.handleError)
@@ -32,7 +35,10 @@ export class PhotoService {
         map((response) =>
           response.data.map((photo) => ({
             ...photo,
-            imageUrl: `${this.baseUrl}${photo.imageUrl}`,
+            // Cloudinary returns full URLs, so no need to prepend baseUrl
+            imageUrl: photo.imageUrl.startsWith('http')
+              ? photo.imageUrl
+              : `${this.baseUrl}${photo.imageUrl}`, // Fallback for old local URLs
           }))
         ),
         catchError(this.handleError)

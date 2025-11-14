@@ -5,6 +5,7 @@ export interface Photo {
   date: string;
   comment: string;
   imageUrl: string;
+  cloudinaryPublicId?: string;
   createdAt?: string;
   updatedAt?: string;
 }
