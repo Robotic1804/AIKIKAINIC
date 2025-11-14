@@ -1,25 +1,3 @@
-/* ============================================
-   NAVBAR COMPONENT - ESTILOS ESPECÍFICOS
-   Note: Animations (slideDown, fadeInUp), scroll-behavior, focus-visible,
-         reduced-motion, and body.menu-open are now in global styles.css
-   Este archivo contiene SOLO estilos específicos del componente navbar
-============================================ */
-
-/* ========================================
-   JERARQUÍA DE Z-INDEX (DOCUMENTADA)
-   ======================================== */
-/*
-  Z-Index Hierarchy:
-  - Hero Section: z-index: 1
-  - Hero Content: z-index: 10
-  - Navbar: z-index: 200
-  - Mobile Menu: z-index: 200
-  - User Dropdown: z-index: 9999
-*/
-
-/* ========================================
-   BASE Y RESET (COMPONENTE ESPECÍFICO)
-   ======================================== */
 body {
   padding-top: 0;
   margin: 0;
@@ -30,9 +8,6 @@ main {
   z-index: 1;
 }
 
-/* ========================================
-   NAVBAR - CONFIGURACIÓN BASE
-   ======================================== */
 .navbar {
   position: sticky;
   top: 0;
@@ -47,9 +22,6 @@ main {
   overflow: visible;
 }
 
-/* ========================================
-   LOGO Y TEXTO JAPONÉS
-   ======================================== */
 .japanese-text {
   font-family: 'Noto Serif JP', 'Yu Gothic', 'Yu Mincho', serif;
   font-size: 2rem;
@@ -79,9 +51,6 @@ main {
   width: 100%;
 }
 
-/* ========================================
-   NAVEGACIÓN DESKTOP
-   ======================================== */
 .nav-link {
   padding: 0.5rem 1rem;
   color: #374151;
@@ -120,17 +89,11 @@ a.nav-link.nav-active .nav-underline {
   width: 100%;
 }
 
-/* ========================================
-   USER DROPDOWN MENU
-   ======================================== */
-
-/* Contenedor del botón de usuario */
 nav.navbar .relative {
   position: relative;
   z-index: auto;
 }
 
-/* Dropdown del usuario */
 nav.navbar .user-dropdown {
   position: absolute;
   right: 0;
@@ -139,10 +102,7 @@ nav.navbar .user-dropdown {
   min-width: 14rem;
   background-color: white;
   border-radius: 0.75rem;
-  box-shadow:
-    0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 10px 10px -5px rgba(0, 0, 0, 0.04),
-    0 0 0 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.05);
   padding: 0.5rem 0;
   z-index: 9999;
   border: 1px solid rgba(229, 231, 235, 0.8);
@@ -154,17 +114,10 @@ nav.navbar .user-dropdown {
 }
 
 @keyframes dropdownFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: translateY(-8px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Items del dropdown */
 nav.navbar .user-dropdown a,
 nav.navbar .user-dropdown button {
   display: flex;
@@ -183,13 +136,11 @@ nav.navbar .user-dropdown button:hover {
   color: #DC2626;
 }
 
-/* Divisores */
 nav.navbar .user-dropdown .border-t {
   margin: 0.5rem 0;
   border-color: #F3F4F6;
 }
 
-/* Badge de notificaciones */
 nav.navbar .user-dropdown .bg-red-500 {
   font-size: 0.75rem;
   padding: 0.125rem 0.5rem;
@@ -198,33 +149,12 @@ nav.navbar .user-dropdown .bg-red-500 {
   flex-shrink: 0;
 }
 
-/* Scroll personalizado */
-nav.navbar .user-dropdown::-webkit-scrollbar {
-  width: 6px;
-}
+nav.navbar .user-dropdown::-webkit-scrollbar { width: 6px; }
+nav.navbar .user-dropdown::-webkit-scrollbar-track { background: #F3F4F6; border-radius: 10px; }
+nav.navbar .user-dropdown::-webkit-scrollbar-thumb { background: #DC2626; border-radius: 10px; }
+nav.navbar .user-dropdown::-webkit-scrollbar-thumb:hover { background: #991B1B; }
+nav.navbar .user-dropdown svg { flex-shrink: 0; }
 
-nav.navbar .user-dropdown::-webkit-scrollbar-track {
-  background: #F3F4F6;
-  border-radius: 10px;
-}
-
-nav.navbar .user-dropdown::-webkit-scrollbar-thumb {
-  background: #DC2626;
-  border-radius: 10px;
-}
-
-nav.navbar .user-dropdown::-webkit-scrollbar-thumb:hover {
-  background: #991B1B;
-}
-
-/* Asegurar que los SVG no rompan el layout */
-nav.navbar .user-dropdown svg {
-  flex-shrink: 0;
-}
-
-/* ========================================
-   NAVEGACIÓN MÓVIL
-   ======================================== */
 .mobile-menu-btn {
   justify-content: center;
   padding: 0.5rem;
@@ -272,7 +202,6 @@ a.mobile-nav-link.mobile-nav-active {
   font-weight: 600;
 }
 
-/* Animación escalonada para menú móvil */
 .mobile-menu > div > a:nth-child(1) { animation: fadeInUp 0.3s ease-out 0.05s both; }
 .mobile-menu > div > a:nth-child(2) { animation: fadeInUp 0.3s ease-out 0.1s both; }
 .mobile-menu > div > a:nth-child(3) { animation: fadeInUp 0.3s ease-out 0.15s both; }
@@ -280,65 +209,26 @@ a.mobile-nav-link.mobile-nav-active {
 .mobile-menu > div > a:nth-child(5) { animation: fadeInUp 0.3s ease-out 0.25s both; }
 .mobile-menu > div > a:nth-child(6) { animation: fadeInUp 0.3s ease-out 0.3s both; }
 
-/* ========================================
-   FALLBACK PARA BACKGROUND-CLIP
-   ======================================== */
 @supports not (background-clip: text) {
-  .bg-clip-text {
-    color: #DC2626;
-  }
+  .bg-clip-text { color: #DC2626; }
 }
 
-/* ========================================
-   RESPONSIVE
-   ======================================== */
 @media (max-width: 768px) {
-  .japanese-text {
-    font-size: 1.75rem;
-  }
+  .japanese-text { font-size: 1.75rem; }
 }
 
 @media (max-width: 480px) {
-  .japanese-text {
-    font-size: 1.5rem;
-  }
+  .japanese-text { font-size: 1.5rem; }
 }
 
-/* ========================================
-   MODO OSCURO
-   ======================================== */
 @media (prefers-color-scheme: dark) {
-  .navbar {
-    background-color: rgba(17, 24, 39, 0.95);
-  }
-
-  .nav-link,
-  .mobile-nav-link {
-    color: #F3F4F6;
-  }
-
-  .nav-link:hover,
-  .mobile-nav-link:hover {
-    color: #EF4444;
-    background-color: rgba(239, 68, 68, 0.1);
-  }
-
-  nav.navbar .user-dropdown {
-    background-color: #1F2937;
-    border-color: #374151;
-  }
+  .navbar { background-color: rgba(17, 24, 39, 0.95); }
+  .nav-link, .mobile-nav-link { color: #F3F4F6; }
+  .nav-link:hover, .mobile-nav-link:hover { color: #EF4444; background-color: rgba(239, 68, 68, 0.1); }
+  nav.navbar .user-dropdown { background-color: #1F2937; border-color: #374151; }
 }
 
-/* ========================================
-   OPTIMIZACIÓN TÁCTIL
-   ======================================== */
 @media (hover: none) and (pointer: coarse) {
-  .nav-link:hover .nav-underline,
-  .logo-link:hover::after {
-    width: 0;
-  }
-
-  .nav-link:active {
-    background-color: #FEF2F2;
-  }
+  .nav-link:hover .nav-underline, .logo-link:hover::after { width: 0; }
+  .nav-link:active { background-color: #FEF2F2; }
 }
