@@ -26,13 +26,11 @@ export class SanitizeUrlPipe implements PipeTransform {
 
     // Validate URL format
     if (!this.isValidUrl(url)) {
-      console.warn('[SanitizeUrlPipe] Invalid URL format:', url);
       return null;
     }
 
     // Check against whitelist
     if (!this.isTrustedUrl(url)) {
-      console.warn('[SanitizeUrlPipe] URL not in whitelist:', url);
       return null;
     }
 

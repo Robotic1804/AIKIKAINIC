@@ -6,4 +6,4 @@ import { appConfig } from './app.config';
 
 
 bootstrapApplication(AppComponent, appConfig)
-  .catch((err) => console.error(err));
+  .catch(() => {});
