@@ -159,11 +159,11 @@ export class HorariosComponent implements OnInit, OnDestroy {
               this.eventForm.patchValue({
                 location: {
                   coordinates: { lat, lng },
-                  name: firstResult.display_name,
+                  // Don't auto-set name - let user choose their own custom name
                 },
               });
               this.coordinatesSet = true;
-              this.notificationService.success('✓ Ubicación encontrada: ' + firstResult.display_name);
+              this.notificationService.success('✓ Coordenadas obtenidas para: ' + firstResult.display_name);
             } else {
               this.coordinatesSet = false;
               this.showGeocodeError('Coordenadas inválidas');
