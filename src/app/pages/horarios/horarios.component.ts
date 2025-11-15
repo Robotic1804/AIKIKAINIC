@@ -124,7 +124,7 @@ export class HorariosComponent implements OnInit, OnDestroy {
       !addressControl.value?.trim() ||
       addressControl.value.trim().length < 3
     ) {
-      // Si no hay dirección o tiene menos de 3 caracteres, resetea coordenadas
+     
       this.eventForm.patchValue({
         location: {
           coordinates: { lat: 0, lng: 0 },
