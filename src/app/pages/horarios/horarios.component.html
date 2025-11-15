@@ -502,14 +502,41 @@
                   class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none transition-colors"
                   [class.border-red-500]="eventForm.get('location.name')?.invalid && eventForm.get('location.name')?.touched"/>
 
-                <input
-                  type="text"
-                  formControlName="address"
-                  placeholder="Dirección (ej: Parque Central, Managua)"
-                  class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none transition-colors"
-                  [class.border-red-500]="eventForm.get('location.address')?.invalid && eventForm.get('location.address')?.touched"
-                  (input)="geocodeAddress()"/>
-                
+                <div class="relative">
+                  <input
+                    type="text"
+                    formControlName="address"
+                    placeholder="Dirección (ej: Parque Central, Managua)"
+                    class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none transition-colors pr-10"
+                    [class.border-red-500]="eventForm.get('location.address')?.invalid && eventForm.get('location.address')?.touched"
+                    [class.border-green-500]="coordinatesSet"
+                    (input)="geocodeAddress()"/>
+
+                  <!-- Loading spinner while geocoding -->
+                  @if (geocodingInProgress) {
+                    <div class="absolute right-3 top-3">
+                      <svg class="animate-spin h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                    </div>
+                  }
+
+                  <!-- Success checkmark when coordinates are set -->
+                  @if (coordinatesSet && !geocodingInProgress) {
+                    <div class="absolute right-3 top-3">
+                      <svg class="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                      </svg>
+                    </div>
+                  }
+                </div>
+
+                <!-- Help text -->
+                <p class="text-xs text-gray-500">
+                  💡 Escribe la dirección y las coordenadas se obtendrán automáticamente
+                </p>
+
                 <!-- Coordenadas ocultas -->
                 <input type="hidden" formControlName="lat" />
                 <input type="hidden" formControlName="lng" />

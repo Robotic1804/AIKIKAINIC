@@ -77,6 +77,8 @@ export class HorariosComponent implements OnInit, OnDestroy {
 
   // Para gestionar el debounce
   private geocodeTimeout: any = null;
+  geocodingInProgress = false;
+  coordinatesSet = false;
 
   constructor() {
     this.eventForm = this.fb.group({
@@ -128,6 +130,7 @@ export class HorariosComponent implements OnInit, OnDestroy {
           coordinates: { lat: 0, lng: 0 },
         },
       });
+      this.coordinatesSet = false;
       return;
     }
 
@@ -140,9 +143,12 @@ export class HorariosComponent implements OnInit, OnDestroy {
       clearTimeout(this.geocodeTimeout);
     }
 
+    this.geocodingInProgress = true;
+
     this.geocodeTimeout = setTimeout(() => {
       this.http.get<NominatimResult[]>(url).subscribe({
         next: (results) => {
+          this.geocodingInProgress = false;
           if (results && results.length > 0) {
             const firstResult = results[0];
             const lat = parseFloat(firstResult.lat);
@@ -156,16 +162,22 @@ export class HorariosComponent implements OnInit, OnDestroy {
                   name: firstResult.display_name,
                 },
               });
+              this.coordinatesSet = true;
+              this.notificationService.success('✓ Ubicación encontrada: ' + firstResult.display_name);
             } else {
+              this.coordinatesSet = false;
               this.showGeocodeError('Coordenadas inválidas');
             }
           } else {
+            this.coordinatesSet = false;
             this.showGeocodeError(
               'No se encontró la dirección. Por favor, verifica e inténtalo de nuevo.'
             );
           }
         },
         error: () => {
+          this.geocodingInProgress = false;
+          this.coordinatesSet = false;
           this.showGeocodeError(
             'Error al obtener la ubicación. Por favor, verifica tu conexión e inténtalo de nuevo.'
           );
@@ -189,7 +201,6 @@ export class HorariosComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    // Limpia el timeout si existe
     if (this.geocodeTimeout) {
       clearTimeout(this.geocodeTimeout);
     }
@@ -419,6 +430,8 @@ export class HorariosComponent implements OnInit, OnDestroy {
 
   openCreateEventModal(): void {
     this.editingEvent = null;
+    this.coordinatesSet = false;
+    this.geocodingInProgress = false;
     this.eventForm.reset({
       type: 'adult_aikido',
       dayOfWeek: 1,
@@ -478,6 +491,18 @@ export class HorariosComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // Validate coordinates if creating a new location
+    const locationIdValue = this.eventForm.get('locationId')?.value;
+    if (locationIdValue === 'create-new') {
+      const coordinates = this.eventForm.get('location.coordinates')?.value;
+      if (!coordinates || (coordinates.lat === 0 && coordinates.lng === 0)) {
+        this.notificationService.error(
+          'Por favor, ingresa una dirección válida y espera a que se geocodifique (obtenga las coordenadas automáticamente)'
+        );
+        return;
+      }
+    }
+
     const formValue = this.eventForm.value;
     const eventData: ScheduleEvent = {
       ...formValue,
@@ -500,6 +525,8 @@ export class HorariosComponent implements OnInit, OnDestroy {
               this.notificationService.error('No tienes permisos para actualizar este evento');
             } else if (error.status === 404) {
               this.notificationService.error('El evento no existe');
+            } else if (error.error?.message) {
+              this.notificationService.error(error.error.message);
             } else {
               this.notificationService.error('Error al actualizar el evento. Por favor, intenta de nuevo.');
             }
@@ -517,11 +544,15 @@ export class HorariosComponent implements OnInit, OnDestroy {
           },
           error: (error) => {
             if (error.status === 400) {
-              this.notificationService.error('Datos inválidos. Verifica todos los campos.');
+              // Show specific backend error message if available
+              const errorMsg = error.error?.message || 'Datos inválidos. Verifica todos los campos.';
+              this.notificationService.error(errorMsg);
             } else if (error.status === 401) {
               this.notificationService.error('No estás autenticado. Por favor, inicia sesión.');
             } else if (error.status === 403) {
               this.notificationService.error('No tienes permisos para crear eventos');
+            } else if (error.error?.message) {
+              this.notificationService.error(error.error.message);
             } else {
               this.notificationService.error('Error al crear el evento. Por favor, intenta de nuevo.');
             }
@@ -579,14 +610,23 @@ export class HorariosComponent implements OnInit, OnDestroy {
 
   onLocationSelected(locationId: string): void {
     if (locationId === 'create-new') {
+      this.coordinatesSet = false;
       this.eventForm.patchValue({
         location: { name: '', address: '', coordinates: { lat: 0, lng: 0 } },
         locationId: 'create-new', // 👈 Importante: usar 'create-new' como valor
         updateLocationGlobally: false,
       });
+    } else if (locationId === '') {
+      this.coordinatesSet = false;
+      this.eventForm.patchValue({
+        location: { name: '', address: '', coordinates: { lat: 0, lng: 0 } },
+        locationId: '',
+        updateLocationGlobally: false,
+      });
     } else {
       const loc = this.locations.find((l) => l.id === locationId);
       if (loc) {
+        this.coordinatesSet = true; // Existing locations already have valid coordinates
         this.eventForm.patchValue({
           location: {
             name: loc.name,
