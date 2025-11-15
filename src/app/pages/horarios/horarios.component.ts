@@ -401,18 +401,20 @@ export class HorariosComponent implements OnInit, OnDestroy {
     return this.formatDay(this.currentWeekDates[this.selectedDay]);
   }
   getLocationName(event: ScheduleEvent): string {
+    // Prioriza el nombre embebido (siempre disponible)
+    if (event.location && event.location.name) {
+      return event.location.name;
+    }
+
+    // Si no hay nombre embebido, busca por locationId
     if (event.locationId) {
-      // Si hay un locationId, busca en la lista de ubicaciones
       const location = this.locations.find(
         (loc) => loc.id === event.locationId
       );
       return location?.name || 'Ubicación desconocida';
-    } else if (event.location && event.location.name) {
-      // Si no hay locationId pero sí hay ubicación embebida, usa su nombre
-      return event.location.name;
-    } else {
-      return 'Ubicación desconocida';
     }
+
+    return 'Ubicación desconocida';
   }
 
   getLocationNameById(locationId: string): string {
@@ -539,6 +541,7 @@ export class HorariosComponent implements OnInit, OnDestroy {
         .subscribe({
           next: () => {
             this.loadEvents();
+            this.loadLocations(); // Reload locations to include any new ones
             this.closeEditModal();
             this.notificationService.success('Evento creado exitosamente');
           },
