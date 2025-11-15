@@ -1,0 +1,23 @@
+{
+  "name": "Aikido Nicaragua - Aikikainic",
+  "short_name": "Aikikainic",
+  "description": "Escuela de Aikido en Nicaragua. Certificación internacional Aikikai Foundation.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#DC2626",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -2,9 +2,11 @@
   <!-- Red background -->
   <rect width="180" height="180" fill="#DC2626"/>
 
-  <!-- White Japanese character style "A" for Aikido -->
-  <g fill="#ffffff" transform="translate(90, 90)">
-    <path d="M -28 42 L 0 -42 L 28 42 L 18 42 L 0 -18 L -18 42 Z"/>
-    <rect x="-21" y="14" width="42" height="11" rx="2"/>
-  </g>
+  <!-- White Japanese character 合 (ai - harmony) -->
+  <text x="90" y="148"
+        font-family="'Noto Serif JP', 'Hiragino Kaku Gothic Pro', 'Yu Gothic', 'MS Gothic', sans-serif"
+        font-size="135"
+        font-weight="900"
+        fill="#ffffff"
+        text-anchor="middle">合</text>
 </svg>

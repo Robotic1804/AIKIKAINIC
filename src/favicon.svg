@@ -1,11 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <!-- Red background -->
-  <rect width="512" height="512" fill="#DC2626" rx="64"/>
+  <rect width="100" height="100" fill="#DC2626"/>
 
-  <!-- White Japanese character 合 (ai - harmony) drawn as paths for reliability -->
-  <g fill="#ffffff" transform="translate(256, 256)">
-    <!-- Simplified stylized "A" representing Aikido -->
-    <path d="M -80 120 L 0 -120 L 80 120 L 50 120 L 0 -50 L -50 120 Z"/>
-    <rect x="-60" y="40" width="120" height="30" rx="5"/>
-  </g>
+  <!-- White Japanese character 合 (ai - harmony/unite) -->
+  <text x="50" y="82"
+        font-family="'Noto Serif JP', 'Hiragino Kaku Gothic Pro', 'Yu Gothic', 'MS Gothic', sans-serif"
+        font-size="75"
+        font-weight="900"
+        fill="#ffffff"
+        text-anchor="middle">合</text>
 </svg>
