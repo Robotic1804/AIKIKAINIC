@@ -19,7 +19,7 @@
             "index": "src/index.html",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": ["src/favicon.ico", "src/favicon.svg", "src/assets"],
             "styles": ["src/styles.css", "node_modules/aos/dist/aos.css"],
             "scripts": [],
             "browser": "src/main.ts",
@@ -84,6 +84,7 @@
             "tsConfig": "tsconfig.spec.json",
             "assets": [
               "src/favicon.ico",
+              "src/favicon.svg",
               "src/assets"
             ],
             "styles": [
