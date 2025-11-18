@@ -21,6 +21,7 @@ import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ModalService } from 'src/app/services/modal.service';
 import { NotificationService } from 'src/app/services/notification.service';
+import { ImageService } from 'src/app/services/image.service';
 
 // Tipos
 type Modo = 'login' | 'register' | 'recuperar';
@@ -51,12 +52,18 @@ interface DatosLogin {
   styleUrls: ['./login-modal.component.css'],
 })
 export class LoginModalComponent implements OnInit {
+  // Services
+  private imageService = inject(ImageService);
+
   // Signals
   modo = signal<Modo>('login');
   mensajeError = signal<string>('');
   mensajeExito = signal<string>('');
   cargando = signal<boolean>(false);
   visible = signal<boolean>(false);
+
+  // URL de la imagen de marca de agua desde Cloudinary
+  watermarkImage = this.imageService.getImageUrl('watermark');
 
   // Formularios
   loginForm!: FormGroup;

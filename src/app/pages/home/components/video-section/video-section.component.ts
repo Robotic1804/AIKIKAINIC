@@ -1,5 +1,6 @@
-import { Component, signal, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, signal, ViewChild, ElementRef, AfterViewInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ImageService } from '../../../../services/image.service';
 
 @Component({
   selector: 'app-video-section',
@@ -9,11 +10,16 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./video-section.component.css'],
 })
 export class VideoSectionComponent implements AfterViewInit, OnDestroy {
+  private imageService = inject(ImageService);
+
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
 
   isPlaying = signal(false);
   isPaused = signal(false);
   videoProgress = signal(0);
+
+  // URL del video desde Cloudinary
+  videoUrl = this.imageService.getVideoUrl('dojo');
 
   private observer?: IntersectionObserver;
 
