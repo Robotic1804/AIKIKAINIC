@@ -286,3 +286,57 @@ a.mobile-nav-link.mobile-nav-active {
   .nav-link:hover .nav-underline, .logo-link:hover::after { width: 0; }
   .nav-link:active { background-color: #FEF2F2; }
 }
+
+/* === MOBILE MAESTROS DROPDOWN === */
+.mobile-maestros-container {
+  width: 100%;
+}
+
+.mobile-maestros-container button {
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.mobile-maestros-submenu {
+  animation: slideDownMobile 0.3s ease-out;
+  transform-origin: top;
+}
+
+.mobile-maestros-submenu.hidden {
+  animation: slideUpMobile 0.2s ease-in;
+}
+
+.mobile-maestros-submenu a {
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.mobile-maestros-submenu a:hover {
+  border-left-color: #DC2626;
+  transform: translateX(4px);
+}
+
+@keyframes slideDownMobile {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    max-height: 200px;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUpMobile {
+  from {
+    opacity: 1;
+    max-height: 200px;
+  }
+  to {
+    opacity: 0;
+    max-height: 0;
+  }
+}

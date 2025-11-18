@@ -97,6 +97,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   closeMenu(): void {
     this.isMenuOpen = false;
+    this.isMenuOpenMaestros = false;
     this.updateBodyClass();
   }
 
@@ -133,7 +134,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
 
     // Close maestros menu if clicked outside
-    if (!clickedElement.closest('.maestros-menu-container')) {
+    if (!clickedElement.closest('.maestros-menu-container') &&
+        !clickedElement.closest('.mobile-maestros-container')) {
       this.isMenuOpenMaestros = false;
     }
   }

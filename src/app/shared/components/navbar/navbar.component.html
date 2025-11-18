@@ -326,14 +326,41 @@
         Historia
       </a>
       
-      <a routerLink="/maestros" 
-         (click)="closeMenu()"
-         routerLinkActive="mobile-nav-active"
-         class="mobile-nav-link"
-         role="menuitem"
-         tabindex="0">
-        Maestros
-      </a>
+      <!-- Maestros dropdown para móvil -->
+      <div class="mobile-maestros-container">
+        <button
+          type="button"
+          (click)="toggleMaestrosMobile($event)"
+          class="mobile-nav-link w-full text-left flex justify-between items-center"
+          [attr.aria-expanded]="isMenuOpenMaestros"
+          aria-haspopup="true">
+          <span>Maestros</span>
+          <svg xmlns="http://www.w3.org/2000/svg"
+               class="h-5 w-5 transition-transform duration-200"
+               [class.rotate-180]="isMenuOpenMaestros"
+               fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <!-- Submenu items -->
+        <div [class.hidden]="!isMenuOpenMaestros"
+             class="mobile-maestros-submenu ml-4 mt-1 space-y-1 overflow-hidden transition-all duration-300"
+             role="menu">
+          <a routerLink="/anibal"
+             (click)="closeMenu(); closeMaestrosMenu()"
+             class="block px-4 py-2.5 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-150"
+             role="menuitem">
+            Anibal
+          </a>
+          <a routerLink="/maestros/Bruce"
+             (click)="closeMenu(); closeMaestrosMenu()"
+             class="block px-4 py-2.5 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-150"
+             role="menuitem">
+            Bruce
+          </a>
+        </div>
+      </div>
       
       <a routerLink="/galeria" 
          (click)="closeMenu()"
