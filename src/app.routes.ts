@@ -71,12 +71,12 @@ export const routes: Routes = [
     title: 'Horarios',
   },
   {
-    path: 'maestros',
+    path: 'anibal',
     loadComponent: () =>
-      import('./app/pages/maestros/maestros.component').then(
-        (m) => m.MaestrosComponent
+      import('./app/maestros/anibal/anibal.component').then(
+        (m) => m.AnibalComponent
       ),
-    title: 'Maestros',
+    title: 'Anibal',
   },
 
   // ==========================================

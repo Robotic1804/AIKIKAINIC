@@ -41,13 +41,64 @@
           <span class="nav-underline"></span>
         </a>
         
-        <a routerLink="/maestros" 
-           routerLinkActive="nav-active"
-           class="nav-link"
-           role="menuitem">
-          <span>Maestros</span>
-          <span class="nav-underline"></span>
-        </a>
+       <!-- Menú desplegable de Maestros (visible para todos) -->
+<!-- Menú desplegable de Maestros (visible para todos) -->
+<div class="relative maestros-menu-container"
+     (mouseenter)="isMenuOpenMaestros = true"
+     (mouseleave)="isMenuOpenMaestros = false"
+     role="none">
+  
+  <!-- Enlace principal con flecha -->
+  <a
+    routerLink="/maestros"
+    routerLinkActive="nav-active"
+    (click)="toggleMaestrosMobile($event)"
+    class="nav-link cursor-pointer"
+    role="menuitem"
+    aria-haspopup="true"
+    [attr.aria-expanded]="isMenuOpenMaestros">
+    <span>Maestros
+      <svg xmlns="http://www.w3.org/2000/svg"
+           class="inline-block h-4 w-4 ml-1 transition-transform duration-200"
+           [class.rotate-180]="isMenuOpenMaestros"
+           fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
+    </span>
+    <span class="nav-underline"></span>
+  </a>
+
+  <!-- Submenú desplegable -->
+  <div 
+    class="absolute left-0 w-56 bg-white rounded-lg shadow-xl py-2 z-[300] border border-gray-100 transition-all duration-200"
+    [class.opacity-0]="!isMenuOpenMaestros"
+    [class.opacity-100]="isMenuOpenMaestros"
+    [class.invisible]="!isMenuOpenMaestros"
+    [class.visible]="isMenuOpenMaestros"
+    [class.translate-y-2]="!isMenuOpenMaestros"
+    [class.translate-y-0]="isMenuOpenMaestros"
+    style="top: calc(100% + 0.25rem); z-index:9999"
+    role="menu">
+
+    <!-- Opción 1: Anibal -->
+    <a
+      routerLink="/anibal"
+      (click)="closeMaestrosMenu()"
+      class="block px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-150"
+      role="menuitem">
+      Anibal
+    </a>
+    
+    <!-- Opción 2: Bruce -->
+    <a 
+      routerLink="/maestros/Bruce"
+      (click)="closeMaestrosMenu()"
+      class="block px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-150"
+      role="menuitem">
+      Bruce
+    </a>
+  </div>
+</div>
         
         <a routerLink="/galeria" 
            routerLinkActive="nav-active"

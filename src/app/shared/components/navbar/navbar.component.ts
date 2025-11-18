@@ -28,6 +28,7 @@ import { ModalService } from '../../../services/modal.service';
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   isMenuOpen = false;
+  isMenuOpenMaestros = false;
   isScrolled = false;
   userMenuOpen = signal<boolean>(false);
   estaAutenticado = signal<boolean>(false);
@@ -59,7 +60,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.closeMenu();
-        this.userMenuOpen.set(false)
+        this.userMenuOpen.set(false);
       });
 
     this.checkScroll();
@@ -73,7 +74,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   toggleUserMenu(event?: Event): void {
     if (event) {
-      event.stopPropagation()
+      event.stopPropagation();
       event.preventDefault();
     }
     this.userMenuOpen.update((open) => !open);
@@ -99,6 +100,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.updateBodyClass();
   }
 
+  closeMaestrosMenu() {
+    this.isMenuOpenMaestros = false;
+  }
+
+  toggleMaestrosMobile(event: Event) {
+    if (window.innerWidth <= 768) {
+      // Mismo breakpoint que md:hidden
+      event.preventDefault();
+      this.isMenuOpenMaestros = !this.isMenuOpenMaestros;
+    }
+  }
+
   private updateBodyClass(): void {
     if (this.isMenuOpen) {
       this.renderer.addClass(document.body, 'menu-open');
@@ -107,17 +120,21 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  // MODIFICADO: Ahora recibe el evento y verifica si el clic fue fuera del menú
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
-    if (this.userMenuOpen()) {
-       const clickedElement = event.target as HTMLElement;
+    const clickedElement = event.target as HTMLElement;
 
-       const clickedInside =
-         this.elementRef.nativeElement.contains(clickedElement);
+    // Close user menu if clicked outside
+    if (this.userMenuOpen()) {
+      const clickedInside = this.elementRef.nativeElement.contains(clickedElement);
       if (!clickedInside) {
         this.userMenuOpen.set(false);
       }
+    }
+
+    // Close maestros menu if clicked outside
+    if (!clickedElement.closest('.maestros-menu-container')) {
+      this.isMenuOpenMaestros = false;
     }
   }
 
@@ -127,15 +144,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   @HostListener('document:keydown.escape', ['$event'])
-  onEscapeKey(event: KeyboardEvent): void {
+  onEscapeKey(event: Event): void {
+    const keyboardEvent = event as KeyboardEvent;
     if (this.isMenuOpen) {
       this.closeMenu();
-      event.preventDefault();
+      keyboardEvent.preventDefault();
     }
-    // AGREGADO: También cerrar el menú de usuario con ESC
     if (this.userMenuOpen()) {
       this.userMenuOpen.set(false);
-      event.preventDefault();
+      keyboardEvent.preventDefault();
     }
   }
 
