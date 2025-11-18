@@ -23,3 +23,45 @@ a::after {
 a:hover::after {
   width: 100%;
 }
+
+/* Responsive Footer Improvements */
+footer {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Prevenir overflow en móviles */
+footer * {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Mejorar legibilidad en móviles muy pequeños */
+@media (max-width: 360px) {
+  footer {
+    font-size: 0.875rem; /* 14px */
+  }
+
+  footer h3 {
+    font-size: 1.5rem; /* 24px */
+  }
+
+  footer h4 {
+    font-size: 1rem; /* 16px */
+  }
+
+  footer .text-sm {
+    font-size: 0.75rem; /* 12px */
+  }
+
+  footer .text-xs {
+    font-size: 0.7rem; /* 11px */
+  }
+}
+
+/* Asegurar que el footer se vea bien en pantallas muy anchas */
+@media (min-width: 1920px) {
+  footer .container {
+    max-width: 1536px;
+  }
+}
