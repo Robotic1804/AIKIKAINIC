@@ -71,6 +71,22 @@ export const routes: Routes = [
     title: 'Horarios',
   },
   {
+    path: 'noticias',
+    loadComponent: () =>
+      import('./app/pages/noticias/noticias.component').then(
+        (m) => m.NoticiasComponent
+      ),
+    title: 'Noticias',
+  },
+  {
+    path: 'noticias/:slug',
+    loadComponent: () =>
+      import('./app/pages/noticias/noticia-detalle/noticia-detalle.component').then(
+        (m) => m.NoticiaDetalleComponent
+      ),
+    title: 'Noticia',
+  },
+  {
     path: 'anibal',
     loadComponent: () =>
       import('./app/maestros/anibal/anibal.component').then(
@@ -123,6 +139,33 @@ export const routes: Routes = [
         (m) => m.AdminDashboardComponent
       ),
     canActivate: [adminGuard],
+  },
+  {
+    path: 'admin/noticias',
+    loadComponent: () =>
+      import('./app/pages/admin/news-admin/news-admin.component').then(
+        (m) => m.NewsAdminComponent
+      ),
+    canActivate: [adminGuard],
+    title: 'Gestión de Noticias',
+  },
+  {
+    path: 'admin/noticias/nueva',
+    loadComponent: () =>
+      import('./app/pages/admin/news-editor/news-editor.component').then(
+        (m) => m.NewsEditorComponent
+      ),
+    canActivate: [adminGuard],
+    title: 'Nueva Noticia',
+  },
+  {
+    path: 'admin/noticias/editar/:id',
+    loadComponent: () =>
+      import('./app/pages/admin/news-editor/news-editor.component').then(
+        (m) => m.NewsEditorComponent
+      ),
+    canActivate: [adminGuard],
+    title: 'Editar Noticia',
   },
   {
     path: 'admin',

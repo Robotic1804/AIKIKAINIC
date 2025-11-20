@@ -1,4 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { firstValueFrom } from 'rxjs';
 
 /**
  * Servicio centralizado para manejar URLs de imágenes desde Cloudinary
@@ -47,6 +50,9 @@ export class ImageService {
       dojo: 'aikikainic/videos/dojo-video'
     }
   };
+
+  private http = inject(HttpClient);
+  private apiUrl = environment.apiUrl;
 
   constructor() {}
 
@@ -144,6 +150,34 @@ export class ImageService {
     }
 
     return typeof current === 'string' ? current : undefined;
+  }
+
+  /**
+   * Sube una imagen a Cloudinary a través del backend
+   * @param file Archivo de imagen a subir
+   * @param folder Carpeta en Cloudinary (ej: 'news-featured', 'news-gallery')
+   * @returns Promise con url y publicId de Cloudinary
+   */
+  async uploadToCloudinary(
+    file: File,
+    folder: string = 'news'
+  ): Promise<{ url: string; publicId: string }> {
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('folder', folder);
+
+    try {
+      const response = await firstValueFrom(
+        this.http.post<{ url: string; publicId: string }>(
+          `${this.apiUrl}/upload/image`,
+          formData
+        )
+      );
+      return response;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      throw new Error('Failed to upload image');
+    }
   }
 
   /**

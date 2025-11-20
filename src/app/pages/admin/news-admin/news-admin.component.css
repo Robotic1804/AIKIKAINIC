@@ -1,0 +1,18 @@
+/* Admin News Component Styles */
+
+/* Smooth transitions */
+button {
+  transition: all 0.2s ease;
+}
+
+/* Table responsive improvements */
+@media (max-width: 768px) {
+  table {
+    font-size: 0.875rem;
+  }
+
+  .px-6 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

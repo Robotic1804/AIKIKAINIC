@@ -1,0 +1,480 @@
+<!-- News Editor Component -->
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- Header -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900">
+            {{ isEditMode ? 'Editar Noticia' : 'Nueva Noticia' }}
+          </h1>
+          <p class="text-gray-600 mt-1">
+            Completa todos los campos para {{ isEditMode ? 'actualizar' : 'crear' }} la noticia
+          </p>
+        </div>
+
+        <!-- Preview Toggle -->
+        <button
+          (click)="togglePreview()"
+          class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+          </svg>
+          <span>{{ showPreview ? 'Ocultar' : 'Vista' }} Previa</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    @if (isLoading) {
+      <div class="bg-white rounded-lg shadow-md p-12 text-center">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+        <p class="mt-4 text-gray-600">Cargando noticia...</p>
+      </div>
+    }
+
+    <!-- Preview Mode -->
+    @if (showPreview && !isLoading) {
+      <div class="bg-white rounded-lg shadow-md p-8 mb-6">
+        <h2 class="text-2xl font-bold mb-6 text-gray-900">Vista Previa</h2>
+
+        <!-- Featured Image -->
+        @if (previewData.featuredImage) {
+          <img
+            [src]="previewData.featuredImage"
+            [alt]="previewData.title"
+            class="w-full h-96 object-cover rounded-lg mb-6"
+          />
+        }
+
+        <!-- Category & Date -->
+        <div class="flex items-center gap-4 mb-4">
+          <span class="px-3 py-1 bg-red-500 text-white text-sm font-semibold rounded-full">
+            {{ categoryLabels[previewData.category] }}
+          </span>
+          <span class="text-gray-600 text-sm">
+            {{ previewData.publishedAt | date: 'dd MMMM yyyy' }}
+          </span>
+        </div>
+
+        <!-- Title & Subtitle -->
+        <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ previewData.title }}</h1>
+        @if (previewData.subtitle) {
+          <p class="text-xl text-gray-600 mb-6">{{ previewData.subtitle }}</p>
+        }
+
+        <!-- Excerpt -->
+        <p class="text-lg text-gray-700 mb-6 italic border-l-4 border-red-500 pl-4">
+          {{ previewData.excerpt }}
+        </p>
+
+        <!-- Content -->
+        <div class="prose max-w-none" [innerHTML]="previewData.content"></div>
+
+        <!-- Gallery -->
+        @if (previewData.gallery && previewData.gallery.length > 0) {
+          <div class="mt-8">
+            <h3 class="text-2xl font-bold mb-4">Galería</h3>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+              @for (image of previewData.gallery; track image.url) {
+                <img
+                  [src]="image.url"
+                  [alt]="image.alt"
+                  class="w-full h-48 object-cover rounded-lg"
+                />
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Tags -->
+        @if (previewData.tags && previewData.tags.length > 0) {
+          <div class="mt-6 flex flex-wrap gap-2">
+            @for (tag of previewData.tags; track tag) {
+              <span class="px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full">
+                #{{ tag }}
+              </span>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Editor Form -->
+    @if (!isLoading && !showPreview) {
+      <form [formGroup]="newsForm" class="space-y-6">
+
+        <!-- Basic Info Section -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h2 class="text-xl font-bold text-gray-900 mb-6">Información Básica</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Title -->
+            <div class="md:col-span-2">
+              <label for="title" class="block text-sm font-semibold text-gray-700 mb-2">
+                Título *
+              </label>
+              <input
+                id="title"
+                type="text"
+                formControlName="title"
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none transition-colors text-lg font-medium"
+                placeholder="Ej: Seminario Internacional de Aikido 2025"
+              />
+              @if (newsForm.get('title')?.invalid && newsForm.get('title')?.touched) {
+                <p class="text-red-500 text-sm mt-1">El título es requerido (máx. 200 caracteres)</p>
+              }
+            </div>
+
+            <!-- Subtitle -->
+            <div class="md:col-span-2">
+              <label for="subtitle" class="block text-sm font-semibold text-gray-700 mb-2">
+                Subtítulo (opcional)
+              </label>
+              <input
+                id="subtitle"
+                type="text"
+                formControlName="subtitle"
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none transition-colors"
+                placeholder="Un subtítulo descriptivo"
+              />
+            </div>
+
+            <!-- Excerpt -->
+            <div class="md:col-span-2">
+              <label for="excerpt" class="block text-sm font-semibold text-gray-700 mb-2">
+                Resumen/Extracto * (para cards y sidebar)
+              </label>
+              <textarea
+                id="excerpt"
+                formControlName="excerpt"
+                rows="3"
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none transition-colors resize-none"
+                placeholder="Breve resumen de la noticia (máx. 300 caracteres)"
+                maxlength="300"></textarea>
+              @if (newsForm.get('excerpt')?.invalid && newsForm.get('excerpt')?.touched) {
+                <p class="text-red-500 text-sm mt-1">El resumen es requerido</p>
+              }
+              <p class="text-gray-500 text-sm mt-1">
+                {{ newsForm.get('excerpt')?.value?.length || 0 }}/300 caracteres
+              </p>
+            </div>
+
+            <!-- Category -->
+            <div>
+              <label for="category" class="block text-sm font-semibold text-gray-700 mb-2">
+                Categoría *
+              </label>
+              <select
+                id="category"
+                formControlName="category"
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none transition-colors">
+                @for (cat of categories; track cat) {
+                  <option [value]="cat">{{ categoryLabels[cat] }}</option>
+                }
+              </select>
+            </div>
+
+            <!-- Status -->
+            <div>
+              <label for="status" class="block text-sm font-semibold text-gray-700 mb-2">
+                Estado *
+              </label>
+              <select
+                id="status"
+                formControlName="status"
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none transition-colors">
+                <option [value]="NewsStatus.DRAFT">Borrador</option>
+                <option [value]="NewsStatus.PUBLISHED">Publicado</option>
+                <option [value]="NewsStatus.SCHEDULED">Programado</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Tags -->
+          <div class="mt-6">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">
+              Etiquetas (máx. 10)
+            </label>
+            <div class="flex gap-2 mb-2">
+              <input
+                type="text"
+                [(ngModel)]="currentTag"
+                [ngModelOptions]="{standalone: true}"
+                (keydown.enter)="$event.preventDefault(); addTag()"
+                class="flex-1 px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none transition-colors"
+                placeholder="Escribe una etiqueta y presiona Enter"
+              />
+              <button
+                type="button"
+                (click)="addTag()"
+                class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                Agregar
+              </button>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              @for (tag of newsForm.get('tags')?.value; track tag) {
+                <span class="inline-flex items-center gap-2 px-3 py-1 bg-gray-200 text-gray-700 rounded-full">
+                  #{{ tag }}
+                  <button
+                    type="button"
+                    (click)="removeTag(tag)"
+                    class="text-gray-500 hover:text-red-600">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                  </button>
+                </span>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h2 class="text-xl font-bold text-gray-900 mb-6">Contenido</h2>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">
+              Contenido de la Noticia *
+            </label>
+            <ckeditor
+              [editor]="Editor"
+              [config]="editorConfig"
+              formControlName="content"
+              class="border-2 border-gray-300 rounded-lg overflow-hidden focus-within:border-red-500">
+            </ckeditor>
+            @if (newsForm.get('content')?.invalid && newsForm.get('content')?.touched) {
+              <p class="text-red-500 text-sm mt-2">El contenido es requerido</p>
+            }
+          </div>
+        </div>
+
+        <!-- Images Section -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h2 class="text-xl font-bold text-gray-900 mb-6">Imágenes</h2>
+
+          <!-- Featured Image -->
+          <div class="mb-6">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">
+              Imagen Principal * (aparecerá en cards y detalle)
+            </label>
+
+            @if (featuredImagePreview) {
+              <div class="relative inline-block">
+                <img
+                  [src]="featuredImagePreview"
+                  alt="Preview"
+                  class="w-full max-w-md h-64 object-cover rounded-lg border-2 border-gray-300"
+                />
+                <button
+                  type="button"
+                  (click)="featuredImagePreview = null"
+                  class="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white p-2 rounded-full transition-colors">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                  </svg>
+                </button>
+              </div>
+            } @else {
+              <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                <label class="cursor-pointer">
+                  <span class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors inline-block">
+                    {{ isUploadingFeatured ? 'Subiendo...' : 'Seleccionar Imagen' }}
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    (change)="onFeaturedImageSelected($event)"
+                    [disabled]="isUploadingFeatured"
+                    class="hidden"
+                  />
+                </label>
+                <p class="text-gray-500 text-sm mt-2">PNG, JPG, WEBP (máx. 5MB)</p>
+              </div>
+            }
+          </div>
+
+          <!-- Gallery -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">
+              Galería Adicional (hasta {{ maxGalleryImages }} imágenes)
+            </label>
+
+            @if (galleryPreviews.length > 0) {
+              <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
+                @for (image of galleryPreviews; track image.url; let i = $index) {
+                  <div class="relative group">
+                    <img
+                      [src]="image.url"
+                      [alt]="image.alt"
+                      class="w-full h-32 object-cover rounded-lg border-2 border-gray-300"
+                    />
+                    <button
+                      type="button"
+                      (click)="removeGalleryImage(i)"
+                      class="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white p-1.5 rounded-full transition-colors opacity-0 group-hover:opacity-100">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                      </svg>
+                    </button>
+                  </div>
+                }
+              </div>
+            }
+
+            @if (galleryPreviews.length < maxGalleryImages) {
+              <label class="cursor-pointer inline-block">
+                <span class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors inline-flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                  </svg>
+                  {{ isUploadingGallery ? 'Subiendo...' : 'Agregar Imágenes a la Galería' }}
+                </span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  (change)="onGalleryImagesSelected($event)"
+                  [disabled]="isUploadingGallery"
+                  class="hidden"
+                />
+              </label>
+            }
+          </div>
+        </div>
+
+        <!-- Options Section -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h2 class="text-xl font-bold text-gray-900 mb-6">Opciones Adicionales</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Checkboxes -->
+            <div class="space-y-4">
+              <label class="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  formControlName="isPinned"
+                  class="w-5 h-5 text-red-600 border-gray-300 rounded focus:ring-red-500"
+                />
+                <span class="text-gray-700 font-medium">📌 Destacar esta noticia (aparecerá al inicio)</span>
+              </label>
+
+              <label class="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  formControlName="allowComments"
+                  class="w-5 h-5 text-red-600 border-gray-300 rounded focus:ring-red-500"
+                />
+                <span class="text-gray-700 font-medium">💬 Permitir comentarios</span>
+              </label>
+            </div>
+
+            <!-- Event Info -->
+            <div class="space-y-4">
+              <div>
+                <label for="eventDate" class="block text-sm font-semibold text-gray-700 mb-2">
+                  Fecha del Evento (si aplica)
+                </label>
+                <input
+                  id="eventDate"
+                  type="datetime-local"
+                  formControlName="eventDate"
+                  class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none transition-colors"
+                />
+              </div>
+
+              <div>
+                <label for="eventLocation" class="block text-sm font-semibold text-gray-700 mb-2">
+                  Ubicación del Evento
+                </label>
+                <input
+                  id="eventLocation"
+                  type="text"
+                  formControlName="eventLocation"
+                  class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none transition-colors"
+                  placeholder="Ej: Dojo Principal, Managua"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEO Section (Collapsible) -->
+        <details class="bg-white rounded-lg shadow-md">
+          <summary class="p-6 cursor-pointer font-bold text-gray-900 hover:bg-gray-50 transition-colors">
+            🔍 SEO y Metadatos (Opcional)
+          </summary>
+          <div class="p-6 pt-0 space-y-4">
+            <div>
+              <label for="metaTitle" class="block text-sm font-semibold text-gray-700 mb-2">
+                Título SEO (máx. 60 caracteres)
+              </label>
+              <input
+                id="metaTitle"
+                type="text"
+                formControlName="metaTitle"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none transition-colors"
+                placeholder="Optimizado para motores de búsqueda"
+                maxlength="60"
+              />
+              <p class="text-gray-500 text-sm mt-1">
+                {{ newsForm.get('metaTitle')?.value?.length || 0 }}/60 caracteres
+              </p>
+            </div>
+
+            <div>
+              <label for="metaDescription" class="block text-sm font-semibold text-gray-700 mb-2">
+                Descripción SEO (máx. 160 caracteres)
+              </label>
+              <textarea
+                id="metaDescription"
+                formControlName="metaDescription"
+                rows="3"
+                class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-red-500 focus:outline-none transition-colors resize-none"
+                placeholder="Descripción para resultados de búsqueda"
+                maxlength="160"></textarea>
+              <p class="text-gray-500 text-sm mt-1">
+                {{ newsForm.get('metaDescription')?.value?.length || 0 }}/160 caracteres
+              </p>
+            </div>
+          </div>
+        </details>
+
+        <!-- Action Buttons -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <div class="flex flex-col sm:flex-row gap-4 justify-end">
+            <button
+              type="button"
+              (click)="cancel()"
+              [disabled]="isSaving"
+              class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-semibold disabled:opacity-50">
+              Cancelar
+            </button>
+
+            <button
+              type="button"
+              (click)="saveDraft()"
+              [disabled]="isSaving"
+              class="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors font-semibold disabled:opacity-50">
+              {{ isSaving ? 'Guardando...' : 'Guardar Borrador' }}
+            </button>
+
+            <button
+              type="button"
+              (click)="publishNews()"
+              [disabled]="isSaving || newsForm.invalid || !featuredImagePreview"
+              class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed">
+              {{ isSaving ? 'Publicando...' : (isEditMode ? 'Actualizar y Publicar' : 'Publicar Ahora') }}
+            </button>
+          </div>
+        </div>
+      </form>
+    }
+  </div>
+</div>
