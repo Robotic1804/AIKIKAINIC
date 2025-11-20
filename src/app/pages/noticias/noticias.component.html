@@ -1,0 +1,203 @@
+<!-- Noticias Page -->
+<div class="min-h-screen bg-gray-50 py-12">
+  <div class="container mx-auto px-4 max-w-7xl">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">📰 Noticias y Eventos</h1>
+      <p class="text-gray-600 text-lg">Mantente informado sobre las últimas novedades del dojo</p>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+      <!-- Search Bar -->
+      <div class="mb-6">
+        <div class="relative max-w-2xl">
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (keyup.enter)="onSearch()"
+            placeholder="Buscar noticias por título, contenido o etiquetas..."
+            class="w-full px-4 py-3 pl-12 pr-24 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+          />
+          <svg
+            class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+
+          @if (searchTerm) {
+            <button
+              (click)="clearSearch()"
+              class="absolute right-20 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          }
+
+          <button
+            (click)="onSearch()"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition-colors"
+          >
+            Buscar
+          </button>
+        </div>
+      </div>
+
+      <!-- Category Filters -->
+      <div class="flex flex-wrap gap-3">
+        <button
+          (click)="filterByCategory('all')"
+          [class]="selectedCategory === 'all'
+            ? 'bg-red-600 text-white'
+            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+          class="px-4 py-2 rounded-full font-semibold transition-colors"
+        >
+          Todas
+        </button>
+
+        @for (category of categories; track category) {
+          <button
+            (click)="filterByCategory(category)"
+            [class]="selectedCategory === category
+              ? 'bg-red-600 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+            class="px-4 py-2 rounded-full font-semibold transition-colors"
+          >
+            {{ categoryLabels[category] }}
+          </button>
+        }
+      </div>
+
+      <!-- Results Count -->
+      @if (!isLoading && newsList.length > 0) {
+        <div class="mt-4 text-sm text-gray-600">
+          Mostrando {{ newsList.length }} de {{ totalNews }} noticias
+        </div>
+      }
+    </div>
+
+    <!-- Loading State -->
+    @if (isLoading) {
+      <div class="flex justify-center items-center py-20">
+        <div class="text-center">
+          <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-red-600 mb-4"></div>
+          <p class="text-gray-600">Cargando noticias...</p>
+        </div>
+      </div>
+    }
+
+    @if (!isLoading) {
+      <!-- Pinned News Section -->
+      @if (pinnedNews.length > 0) {
+        <div class="mb-12">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <svg class="w-6 h-6 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 6.477V16h2a1 1 0 110 2H7a1 1 0 110-2h2V6.477L6.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.617a1 1 0 01.894-1.788l1.599.799L9 4.323V3a1 1 0 011-1z"/>
+            </svg>
+            Noticias Destacadas
+          </h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            @for (news of pinnedNews; track news._id) {
+              <app-news-card
+                [news]="news"
+                [showExcerpt]="true"
+                [showStats]="true"
+              />
+            }
+          </div>
+
+          <hr class="border-gray-300 my-8" />
+        </div>
+      }
+
+      <!-- Main News Grid -->
+      @if (newsList.length > 0) {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          @for (news of newsList; track news._id) {
+            <app-news-card
+              [news]="news"
+              [showExcerpt]="true"
+              [showStats]="true"
+            />
+          }
+        </div>
+
+        <!-- Pagination -->
+        @if (totalPages > 1) {
+          <div class="flex justify-center items-center gap-2 mt-12">
+            <!-- Previous Button -->
+            <button
+              (click)="changePage(currentPage - 1)"
+              [disabled]="currentPage === 1"
+              class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+            </button>
+
+            <!-- Page Numbers -->
+            @for (page of getPageNumbers(); track page) {
+              <button
+                (click)="changePage(page)"
+                [class]="currentPage === page
+                  ? 'bg-red-600 text-white'
+                  : 'bg-white text-gray-700 hover:bg-gray-50'"
+                class="px-4 py-2 rounded-lg border border-gray-300 font-semibold transition-colors min-w-[2.5rem]"
+              >
+                {{ page }}
+              </button>
+            }
+
+            <!-- Next Button -->
+            <button
+              (click)="changePage(currentPage + 1)"
+              [disabled]="currentPage === totalPages"
+              class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Page Info -->
+          <div class="text-center mt-4 text-sm text-gray-600">
+            Página {{ currentPage }} de {{ totalPages }}
+          </div>
+        }
+      }
+
+      <!-- Empty State -->
+      @if (newsList.length === 0) {
+        <div class="text-center py-20">
+          <svg class="w-24 h-24 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">No se encontraron noticias</h3>
+          <p class="text-gray-600 mb-6">
+            @if (searchTerm || selectedCategory !== 'all') {
+              No hay noticias que coincidan con tu búsqueda o filtros.
+            } @else {
+              Aún no hay noticias publicadas.
+            }
+          </p>
+          @if (searchTerm || selectedCategory !== 'all') {
+            <button
+              (click)="clearSearch(); filterByCategory('all')"
+              class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+            >
+              Limpiar filtros
+            </button>
+          }
+        </div>
+      }
+    }
+  </div>
+</div>

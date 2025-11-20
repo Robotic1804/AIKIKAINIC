@@ -1,4 +1,24 @@
 <app-hero-section></app-hero-section>
-<app-welcome-section></app-welcome-section>
+
+<!-- News Sidebar Section -->
+<section class="py-12 bg-gray-50">
+  <div class="container mx-auto px-4 max-w-7xl">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Main Content Area (Welcome Section) -->
+      <div class="lg:col-span-2">
+        <app-welcome-section></app-welcome-section>
+      </div>
+
+      <!-- Sticky News Sidebar -->
+      <div class="lg:col-span-1">
+        <app-news-sidebar
+          [title]="'📰 Noticias Destacadas'"
+          [limit]="5"
+          [showPinned]="true"
+        />
+      </div>
+    </div>
+  </div>
+</section>
 
 <app-video-section></app-video-section>

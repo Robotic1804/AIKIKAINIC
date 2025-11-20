@@ -1,0 +1,84 @@
+/* News Sidebar Component Styles */
+
+/* Sticky positioning */
+.news-sidebar {
+  position: sticky;
+  top: 2rem;
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+}
+
+/* Custom scrollbar */
+.news-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.news-sidebar::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+.news-sidebar::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.news-sidebar::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Loading animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Smooth transitions */
+a {
+  transition: all 0.2s ease;
+}
+
+/* Hover effects */
+.news-sidebar a:hover {
+  transform: translateX(2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .news-sidebar {
+    position: static;
+    max-height: none;
+    overflow-y: visible;
+  }
+}
+
+/* Mobile: make sidebar horizontal scrollable */
+@media (max-width: 768px) {
+  .news-sidebar {
+    margin-bottom: 2rem;
+  }
+}
+
+/* Fade in animation */
+.news-sidebar {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

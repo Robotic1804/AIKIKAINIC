@@ -1,0 +1,59 @@
+/* Noticias Component Styles */
+
+/* Smooth animations for loading state */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Filter buttons active state */
+button[class*="bg-red-600"] {
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
+}
+
+/* Pagination hover effects */
+.pagination-button {
+  transition: all 0.2s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Search input focus effects */
+input[type="text"]:focus {
+  outline: none;
+}
+
+/* Empty state animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.text-center {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Responsive grid adjustments */
+@media (max-width: 768px) {
+  .grid {
+    gap: 1rem;
+  }
+}
+
+/* Loading spinner */
+.animate-spin {
+  animation: spin 1s linear infinite;
+}

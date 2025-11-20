@@ -7,6 +7,7 @@ import {
   FormGroup,
   Validators,
   ReactiveFormsModule,
+  FormsModule,
 } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
@@ -29,7 +30,7 @@ import {
 @Component({
   selector: 'app-news-editor',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CKEditorModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, CKEditorModule],
   templateUrl: './news-editor.component.html',
   styleUrls: ['./news-editor.component.css'],
 })
@@ -44,7 +45,7 @@ export class NewsEditorComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
 
   // Editor
-  public Editor = ClassicEditor;
+  public Editor: any = ClassicEditor;
   public editorConfig = {
     toolbar: [
       'heading',
@@ -423,7 +424,7 @@ export class NewsEditorComponent implements OnInit, OnDestroy {
   // PREVIEW DATA
   // ==========================================
 
-  get previewData(): any {
+  get previewData() {
     return {
       title: this.newsForm.get('title')?.value || 'Sin título',
       subtitle: this.newsForm.get('subtitle')?.value,
@@ -431,7 +432,7 @@ export class NewsEditorComponent implements OnInit, OnDestroy {
       excerpt: this.newsForm.get('excerpt')?.value || 'Sin resumen',
       featuredImage: this.featuredImagePreview,
       gallery: this.galleryPreviews,
-      category: this.newsForm.get('category')?.value,
+      category: this.newsForm.get('category')?.value as NewsCategory,
       tags: this.newsForm.get('tags')?.value || [],
       authorName: this.currentUser?.name || 'Admin',
       publishedAt: new Date(),

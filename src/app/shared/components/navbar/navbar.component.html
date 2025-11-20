@@ -108,15 +108,23 @@
           <span class="nav-underline"></span>
         </a>
         
-        <a routerLink="/aiki-face" 
+        <a routerLink="/aiki-face"
            routerLinkActive="nav-active"
            class="nav-link"
            role="menuitem">
           <span>Aiki-Face</span>
           <span class="nav-underline"></span>
         </a>
-        
-    
+
+        <a routerLink="/noticias"
+           routerLinkActive="nav-active"
+           class="nav-link"
+           role="menuitem">
+          <span>Noticias</span>
+          <span class="nav-underline"></span>
+        </a>
+
+
 @if (estaAutenticado()) {
   <div class="relative">
     <!-- Botón principal con avatar y nombre -->
@@ -176,7 +184,7 @@
     </a>
 
     <!-- Mi Progreso / Graduaciones -->
-    <a 
+    <a
       routerLink="/mi-progreso"
       (click)="userMenuOpen.set(false)"
       class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors duration-150"
@@ -186,6 +194,20 @@
       </svg>
       Mi Progreso
     </a>
+
+    <!-- Gestionar Noticias (solo admin/webmaster) -->
+    @if (esAdminOWebmaster()) {
+      <a
+        routerLink="/admin/noticias"
+        (click)="userMenuOpen.set(false)"
+        class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors duration-150"
+        role="menuitem">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+        </svg>
+        Gestionar Noticias
+      </a>
+    }
 
     <!-- Divisor -->
     <div class="border-t border-gray-100 my-2"></div>
@@ -371,7 +393,7 @@
         Galería
       </a>
       
-      <a routerLink="/aiki-face" 
+      <a routerLink="/aiki-face"
          (click)="closeMenu()"
          routerLinkActive="mobile-nav-active"
          class="mobile-nav-link"
@@ -379,7 +401,16 @@
          tabindex="0">
         Aiki-Face
       </a>
-      
+
+      <a routerLink="/noticias"
+         (click)="closeMenu()"
+         routerLinkActive="mobile-nav-active"
+         class="mobile-nav-link"
+         role="menuitem"
+         tabindex="0">
+        Noticias
+      </a>
+
       <!-- Menú condicional: autenticado vs anónimo (mobile) -->
       @if (estaAutenticado()) {
         <div class="pt-2 pb-1 space-y-1">

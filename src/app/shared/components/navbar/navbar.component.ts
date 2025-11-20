@@ -33,6 +33,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   userMenuOpen = signal<boolean>(false);
   estaAutenticado = signal<boolean>(false);
   usuarioNombre = signal<string>('');
+  esAdminOWebmaster = signal<boolean>(false);
   tieneNotificacionesSinLeer = signal(true);
   numeroNotificaciones = signal(3);
 
@@ -51,6 +52,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .subscribe((usuario) => {
         this.estaAutenticado.set(!!usuario);
         this.usuarioNombre.set(usuario?.name || '');
+        this.esAdminOWebmaster.set(usuario?.role === 'admin' || usuario?.role === 'webmaster');
       });
 
     this.router.events

@@ -33,6 +33,7 @@ export interface NewsComment {
   _id?: string;
   userId: string;
   userName: string;
+  userEmail: string;
   userAvatar?: string;
   content: string;
   createdAt: Date | string;
@@ -44,6 +45,7 @@ export interface NewsReply {
   _id?: string;
   userId: string;
   userName: string;
+  userEmail: string;
   content: string;
   createdAt: Date | string;
 }
