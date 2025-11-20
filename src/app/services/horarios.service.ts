@@ -24,7 +24,7 @@ export class HorariosService {
     if (user.role === 'webmaster') return true;
 
     if (user.role === 'admin') {
-      return event.instructorId === user.instructorId;
+      return event.instructorId === user.id;
     }
 
     return false;
