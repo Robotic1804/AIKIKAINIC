@@ -124,6 +124,8 @@
               [news]="news"
               [showExcerpt]="true"
               [showStats]="true"
+                [canDelete]="canDeleteNews(news)"
+                (deleteRequested)="onDeleteNewsRequested($event)" 
             />
           }
         </div>

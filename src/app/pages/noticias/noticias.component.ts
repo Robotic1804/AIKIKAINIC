@@ -11,6 +11,8 @@ import {
   NewsCategory,
   NEWS_CATEGORY_LABELS,
 } from '../../models/news.model';
+import { Router } from '@angular/router';
+import { AuthService } from '../../features/auth/services/auth.service';
 
 @Component({
   selector: 'app-noticias',
@@ -23,7 +25,10 @@ export class NoticiasComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private newsService = inject(NewsService);
   private notificationService = inject(NotificationService);
+  private router = inject(Router);
+  private authService = inject(AuthService);
 
+  currentUser: any
   // State
   newsList: News[] = [];
   pinnedNews: News[] = [];
@@ -45,7 +50,54 @@ export class NoticiasComponent implements OnInit, OnDestroy {
   categoryLabels = NEWS_CATEGORY_LABELS;
 
   ngOnInit(): void {
+    this.authService.usuarioActual$.subscribe(user => {
+      this.currentUser = user;
+      console.log('Usuario actual:', this.currentUser);
+    })
     this.loadNews();
+  }
+
+  canDeleteNews(news: any): boolean {
+    if (!this.currentUser) return false;
+
+    // Webmaster puede eliminar cualquier noticia
+    if (this.currentUser.role === 'webmaster') {
+      return true;
+    }
+
+    // Admin puede eliminar si es el autor de la noticia
+    if (
+      this.currentUser.role === 'admin' &&
+      news.authorId === this.currentUser.id
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
+  onDeleteNewsRequested(newsId: string): void {
+    const confirmDelete = confirm(
+      '¿Estás seguro de que deseas eliminar esta noticia?'
+    );
+
+    if (!confirmDelete) {
+      return;
+    }
+
+    this.newsService.deleteNews(newsId).subscribe({
+      next: (response) => {
+        alert(response.message);
+
+        // Quitar la noticia eliminada de las listas
+        this.newsList = this.newsList.filter((news) => news._id !== newsId);
+        this.pinnedNews = this.pinnedNews.filter((news) => news._id !== newsId);
+      },
+      error: (error) => {
+        console.error('Error al eliminar la noticia:', error);
+        alert('Hubo un error al eliminar la noticia.');
+      },
+    });
   }
 
   ngOnDestroy(): void {
@@ -144,7 +196,7 @@ export class NoticiasComponent implements OnInit, OnDestroy {
       1,
       this.currentPage - Math.floor(maxPagesToShow / 2)
     );
-    let endPage = Math.min(this.totalPages, startPage + maxPagesToShow - 1);
+    const endPage = Math.min(this.totalPages, startPage + maxPagesToShow - 1);
 
     if (endPage - startPage < maxPagesToShow - 1) {
       startPage = Math.max(1, endPage - maxPagesToShow + 1);

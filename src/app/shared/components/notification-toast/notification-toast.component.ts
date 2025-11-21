@@ -10,8 +10,9 @@ import { NotificationService } from '../../../services/notification.service';
     <div class="notification-container">
       @for (notification of notificationService.getNotifications()(); track notification.id) {
         <div
-          class="notification notification-{{notification.type}} animate-fade-in-up"
-          (click)="notificationService.remove(notification.id)"
+          class="notification notification-{{notification.type}}"
+          [class.animate-fade-in-up]="!notification.isClosing"
+          [class.animate-fade-out]="notification.isClosing"
           role="alert"
         >
           <div class="notification-icon">

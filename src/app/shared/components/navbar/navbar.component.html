@@ -154,8 +154,6 @@
    <!-- Menú desplegable controlado por señal -->
 @if (userMenuOpen()) {
   <div class="user-dropdown"
-       (click)="$event.stopPropagation()"
-       (keydown)="$event.stopPropagation()"
        role="menu"
        tabindex="-1">
     

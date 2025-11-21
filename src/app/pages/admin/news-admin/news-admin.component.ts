@@ -229,6 +229,10 @@ export class NewsAdminComponent implements OnInit, OnDestroy {
   }
 
   viewNews(news: News): void {
+    this.router.navigate(['/noticias', news.slug]);
+  }
+
+  viewNewsInNewTab(news: News): void {
     window.open(`/noticias/${news.slug}`, '_blank');
   }
 }

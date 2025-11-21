@@ -70,6 +70,41 @@ export const routes: Routes = [
       ),
     title: 'Horarios',
   },
+
+  // ==========================================
+  // RUTAS DE ADMINISTRACIÓN DE NOTICIAS (ANTES de :slug)
+  // ==========================================
+  {
+    path: 'admin/noticias',
+    loadComponent: () =>
+      import('./app/pages/admin/news-admin/news-admin.component').then(
+        (m) => m.NewsAdminComponent
+      ),
+    canActivate: [adminGuard],
+    title: 'Gestión de Noticias',
+  },
+  {
+    path: 'admin/noticias/nueva',
+    loadComponent: () =>
+      import('./app/pages/admin/news-editor/news-editor.component').then(
+        (m) => m.NewsEditorComponent
+      ),
+    canActivate: [adminGuard],
+    title: 'Nueva Noticia',
+  },
+  {
+    path: 'admin/noticias/editar/:id',
+    loadComponent: () =>
+      import('./app/pages/admin/news-editor/news-editor.component').then(
+        (m) => m.NewsEditorComponent
+      ),
+    canActivate: [adminGuard],
+    title: 'Editar Noticia',
+  },
+
+  // ==========================================
+  // RUTAS PÚBLICAS DE NOTICIAS
+  // ==========================================
   {
     path: 'noticias',
     loadComponent: () =>
@@ -139,33 +174,6 @@ export const routes: Routes = [
         (m) => m.AdminDashboardComponent
       ),
     canActivate: [adminGuard],
-  },
-  {
-    path: 'admin/noticias',
-    loadComponent: () =>
-      import('./app/pages/admin/news-admin/news-admin.component').then(
-        (m) => m.NewsAdminComponent
-      ),
-    canActivate: [adminGuard],
-    title: 'Gestión de Noticias',
-  },
-  {
-    path: 'admin/noticias/nueva',
-    loadComponent: () =>
-      import('./app/pages/admin/news-editor/news-editor.component').then(
-        (m) => m.NewsEditorComponent
-      ),
-    canActivate: [adminGuard],
-    title: 'Nueva Noticia',
-  },
-  {
-    path: 'admin/noticias/editar/:id',
-    loadComponent: () =>
-      import('./app/pages/admin/news-editor/news-editor.component').then(
-        (m) => m.NewsEditorComponent
-      ),
-    canActivate: [adminGuard],
-    title: 'Editar Noticia',
   },
   {
     path: 'admin',

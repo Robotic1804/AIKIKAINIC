@@ -1,5 +1,5 @@
 // shared/components/news-card/news-card.component.ts
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import {
@@ -17,12 +17,16 @@ import {
 })
 export class NewsCardComponent {
   @Input({ required: true }) news!: News;
-  @Input() showExcerpt: boolean = true;
-  @Input() showStats: boolean = true;
-  @Input() compact: boolean = false; // For sidebar
+  @Input() showExcerpt = true;
+  @Input() showStats = true;
+  @Input() compact = false;
+  @Input() canDelete = false; 
+  @Output() deleteRequested = new EventEmitter<string>();
 
   categoryLabels = NEWS_CATEGORY_LABELS;
   categoryColors = NEWS_CATEGORY_COLORS;
+
+ 
 
   formatDate(date: string | Date | undefined): string {
     if (!date) return '';
@@ -37,5 +41,15 @@ export class NewsCardComponent {
     if (!text) return '';
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength).trim() + '...';
+  }
+  onDelete(): void {
+    if (this.canDelete) {
+      const confirmDelete = confirm(
+        '¿Estás seguro de que deseas eliminar esta noticia?'
+      );
+      if (confirmDelete) {
+        this.deleteRequested.emit(this.news._id);
+      }
+    }
   }
 }

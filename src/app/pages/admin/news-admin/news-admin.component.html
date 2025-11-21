@@ -103,7 +103,10 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               @for (news of newsList; track news._id) {
-                <tr class="hover:bg-gray-50 transition-colors">
+                <tr
+                  (click)="viewNews(news)"
+                  class="hover:bg-gray-50 transition-colors cursor-pointer"
+                  title="Click para ver la noticia">
                   <!-- Title & Image -->
                   <td class="px-6 py-4">
                     <div class="flex items-center gap-4">
@@ -176,20 +179,19 @@
                   <td class="px-6 py-4">
                     @if (canEditNews(news)) {
                       <div class="flex items-center justify-end gap-2">
-                        <!-- View -->
+                        <!-- View in new tab -->
                         <button
-                          (click)="viewNews(news)"
+                          (click)="viewNewsInNewTab(news); $event.stopPropagation()"
                           class="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                          title="Ver">
+                          title="Ver en nueva pestaña">
                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                           </svg>
                         </button>
 
                         <!-- Edit -->
                         <button
-                          (click)="editNews(news)"
+                          (click)="editNews(news); $event.stopPropagation()"
                           class="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                           title="Editar">
                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -200,7 +202,7 @@
                         <!-- Publish (if draft) -->
                         @if (news.status === NewsStatus.DRAFT) {
                           <button
-                            (click)="publishNews(news)"
+                            (click)="publishNews(news); $event.stopPropagation()"
                             class="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                             title="Publicar">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -212,7 +214,7 @@
                         <!-- Archive (if published) -->
                         @if (news.status === NewsStatus.PUBLISHED) {
                           <button
-                            (click)="archiveNews(news)"
+                            (click)="archiveNews(news); $event.stopPropagation()"
                             class="p-2 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
                             title="Archivar">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -223,7 +225,7 @@
 
                         <!-- Delete -->
                         <button
-                          (click)="deleteNews(news)"
+                          (click)="deleteNews(news); $event.stopPropagation()"
                           class="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                           title="Eliminar">
                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

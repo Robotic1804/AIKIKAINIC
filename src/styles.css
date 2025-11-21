@@ -191,6 +191,21 @@ a {
   animation: fade-in-up 0.3s ease-out;
 }
 
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+}
+
+.animate-fade-out {
+  animation: fade-out 0.3s ease-in forwards;
+}
+
 /* Animación suave para mensajes */
 @keyframes fade-in {
   from {
